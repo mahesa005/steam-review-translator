@@ -1,0 +1,119 @@
+# Parameters for the Task 2 EDA (experiments/task2_aspect/eda). Every script reads this file.
+seed: 42
+
+input:
+  raw_file: data/raw/steam.csv.bz2
+  # The CSV has no header. Mapping confirmed by the Task 2 owner (2026-11-14).
+  columns: [app_id, review_text, review_score, review_votes]
+  # review_score: 1 = recommended, -1 = not recommended
+  # review_votes: 1 = at least one user voted the review helpful (metadata only)
+  batch_rows: 200000
+
+language:
+  detector: fasttext-lid.176   # fastText language-ID model (compressed .ftz)
+  model_url: https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz
+  min_prob: 0.5                # top label must be "en" with prob >= this
+
+filters:
+  short_min_chars: 20          # review is "short" if < 20 chars OR < 5 words
+  short_min_words: 5
+  repeated_char_run: 10        # same character 10+ times in a row ("!!!!!!!!!!", "aaaaaaaaaa")
+  min_alnum_ratio: 0.5         # letters+digits / non-space chars, below -> mostly symbols
+  ascii_art_min_chars: 40      # symbol checks only apply to texts at least this long
+  ascii_art_symbol_ratio: 0.4  # share of drawing/symbol chars (block, braille, box, punctuation runs)
+  self_repeat_min_chars: 200   # compression check only for texts at least this long
+  self_repeat_max_ratio: 0.15  # zlib(compressed)/len below this -> copy-paste repeated phrase
+  copy_paste_min_count: 5      # identical long text (>= short_min_chars) seen this often corpus-wide
+  copy_paste_min_chars: 40
+
+sentences:
+  spacy_model: en_core_web_sm  # tagger + lemmatizer only; parser/NER disabled for speed
+  split_on_multispace: true    # this dump collapsed line breaks into 2+ spaces -> treat as a boundary
+  runon_max_tokens: 50         # longer "sentences" (no punctuation) are re-split at , ; : and conjunctions
+  short_sentence_tokens: 4     # sentences with < 4 word tokens are "likely uninformative"
+  batch_size: 512
+  n_process: 6
+
+candidates:
+  min_english_reviews: 200     # clean English reviews per game
+  reviews_per_game: 200        # random reviews per candidate game for sentence/lexicon stats
+
+lexicon:
+  path: configs/task2/lexicon.yaml
+  examples_per_keyword: 5
+  ngram_top_k: 40
+  # Context words that make a keyword hit suspicious (keyword -> neighbour tokens/phrases).
+  suspicious_contexts:
+    story: [short story, long story, success story, story short]
+    hard: [hard drive, hard disk]
+    sound: [sounds like, sound like, sounds good, sound good, sounds fun, sounds great]
+    worth: [worth it, worth the]  # not suspicious per se, but price vs. "worth my time" is ambiguous
+    boss: [like a boss]
+    fight: [fight for, fight back]
+    online: [online store]
+    content: [content creator, content creators]
+    hours: [hours played, hours in, hours on record]
+    sale: [for sale]
+    ending: [never ending, never-ending]
+    balance: [balance of]
+    money: [money grab, cash grab]
+    recommend: [not recommend, wouldn't recommend, would not recommend, don't recommend, can't recommend]
+
+topics:
+  sample_sentences: 50000      # stratified across candidate games
+  min_tokens: 4                # only embed sentences with >= 4 word tokens
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  batch_size_gpu: 256          # RTX 4050 6 GB: MiniLM fits easily
+  batch_size_cpu: 64
+  umap: {n_neighbors: 15, n_components: 5, min_dist: 0.0, metric: cosine}
+  hdbscan_min_cluster_sizes: [10, 30, 100]  # 10 = BERTopic default
+  vectorizer: {stop_words: english, min_df: 5}
+  top_n_words: 10
+  coherence_processes: 4
+  mixed_topic_max_purity: 0.5  # topic is "mixed" if its top lexicon aspect < 50% of its hits
+  low_coverage_max: 0.2        # topic with < 20% lexicon-hit sentences = candidate missing aspect
+  candidate_themes:            # topic word -> theme, used only to name candidate missing aspects
+    modding: [mod, mods, modding, workshop, modders]
+    dlc: [dlc, dlcs, expansion, season pass]
+    bugs: [bug, bugs, buggy, glitch, glitches, crash, crashes]
+    controls: [controls, controller, keyboard, mouse, gamepad, keybinds]
+    devs_updates: [dev, devs, developer, developers, update, updates, patch, patches, abandoned]
+    refunds: [refund, refunded, refunds]
+    early_access: [early, access, alpha, beta]
+    community: [community, toxic, players, people, friends]
+    cheating: [hacker, hackers, cheater, cheaters, cheat, cheats, vac]
+    servers: [server, servers, ping, connection, disconnect]
+    nostalgia: [childhood, nostalgia, memories, classic, old]
+
+selection:
+  n_games: 10
+  n_backups: 3
+  n_train: 7
+  shortlist: 150               # top games by metric score that get Steam metadata fetched
+  steam_request_interval_s: 1.6
+  min_aspects_5pct: 5          # soft target used in the score, not a hard filter
+  min_negative_games: 3        # at least 3 picks with >= 25% negative reviews
+  negative_share_threshold: 0.25
+  max_per_primary_tag: 1       # genre diversity: one game per primary SteamSpy tag
+  max_per_store_genre: 4       # and at most 4 games sharing any Steam store genre
+  # score = sum(weight * z-score(metric)) over candidate games
+  weights:
+    hit_rate: 1.0              # lexicon covers the reviews (system A has signal)
+    aspect_entropy: 1.0        # aspects are spread, not one-topic reviews
+    aspects_ge_5pct: 0.5
+    informative_share: 1.0     # 1 - short/spam share among English reviews
+    log_n_clean: 0.25          # more data to sample from
+    negative_share_capped: 0.5 # min(negative share, 0.5): some criticism present
+  # Generic SteamSpy tags skipped when picking a game's "primary tag"
+  generic_tags: [Indie, Action, Adventure, Singleplayer, Multiplayer, Casual, Early Access,
+                 Free to Play, Great Soundtrack, Atmospheric, Funny, Classic, Co-op,
+                 Online Co-Op, Massively Multiplayer, 2D, 3D, Simulation, Strategy, RPG,
+                 Difficult, Story Rich, Open World, Sandbox, Female Protagonist, Masterpiece,
+                 Gore, Violent, Blood, Nudity, Sexual Content, Mature, Comedy, Cute, Moddable,
+                 Replay Value, Retro, Pixel Graphics, Colorful, Dark, Fantasy, Sci-fi, Zombies,
+                 Dinosaurs, Great Soundtrack, Controller, Local Co-Op, Local Multiplayer,
+                 Psychological Horror, Character Customization, Choices Matter, Loot]
+
+labeling_sample:
+  reviews_per_game: 150
+  verify_seconds_per_sentence: [5, 10]   # low/high assumption for checking one LLM label
