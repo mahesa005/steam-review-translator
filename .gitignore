@@ -1,0 +1,58 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# --- Environments / secrets ---
+.venv/
+venv/
+env/
+.env
+!.env.example
+
+# --- Data: never commit data. Only placeholders + README are tracked. ---
+data/*
+!data/README.md
+!data/raw/
+!data/interim/
+!data/processed/
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# --- Artifacts: models, embeddings, logs, run outputs ---
+artifacts/*
+!artifacts/.gitkeep
+
+# --- Model weights / checkpoints anywhere ---
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+checkpoints/
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# --- Local tool state ---
+.remember/

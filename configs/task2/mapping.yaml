@@ -1,0 +1,6 @@
+# Topic -> aspect mapping thresholds (placeholder values, tune on the dev set).
+# A topic is assigned its best-scoring aspect only if:
+#   best score >= floor   AND   best score / total score >= ratio
+# otherwise it maps to `other`. See src/steam_review_translator/aspect/mapping.py.
+floor: 0.3
+ratio: 0.5

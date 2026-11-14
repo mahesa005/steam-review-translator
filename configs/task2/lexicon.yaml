@@ -1,0 +1,102 @@
+# Aspect lexicon (PLACEHOLDER seed, Task 2 owner will replace it).
+#
+# - Keys under `aspects` must be Aspect values from core/schemas.py.
+# - Matching is lowercase and whole-token: "bug" matches "a bug" but not "debug".
+#   Multi-word terms ("art style") match the exact token sequence.
+# - `other` is the fallback for mentions that map to no aspect; it has no trigger terms.
+# - Words in `ambiguous` NEVER trigger an aspect on their own, even if listed above.
+
+aspects:
+  gameplay:
+    - gameplay
+    - combat
+    - mechanics
+    - controls
+    - puzzle
+    - quest
+    - mission
+    - boss
+    - fight
+    - grind
+  story:
+    - story
+    - plot
+    - narrative
+    - characters
+    - dialogue
+    - ending
+    - lore
+    - campaign
+  graphics:
+    - graphics
+    - visuals
+    - art style
+    - textures
+    - animation
+    - lighting
+    - aesthetic
+  audio:
+    - music
+    - soundtrack
+    - sound
+    - sound effects
+    - voice acting
+    - audio
+  performance:
+    - fps
+    - framerate
+    - lag
+    - stutter
+    - crash
+    - crashes
+    - bug
+    - bugs
+    - optimization
+    - freeze
+    - glitch
+  price:
+    - price
+    - worth
+    - money
+    - expensive
+    - cheap
+    - sale
+    - discount
+    - refund
+    - dlc
+    - microtransactions
+  multiplayer:
+    - multiplayer
+    - co-op
+    - coop
+    - online
+    - pvp
+    - servers
+    - matchmaking
+  difficulty:
+    - difficulty
+    - challenging
+    - punishing
+    - balance
+    - learning curve
+  content:
+    - content
+    - replayability
+    - hours
+    - length
+    - variety
+    - updates
+    - endgame
+  overall:
+    - recommend
+    - 10/10
+    - masterpiece
+    - goty
+  other: []
+
+ambiguous:
+  - hard
+  - easy
+  - smooth
+  - free
+  - beautiful

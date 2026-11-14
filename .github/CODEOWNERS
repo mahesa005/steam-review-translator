@@ -1,0 +1,24 @@
+# Replace the placeholder handles with real GitHub usernames.
+# Later rules win, so the catch-all comes first.
+
+*                                         @farrel-username @mahesa-username @lukas-username
+
+# Shared contract: every owner must approve changes.
+/src/steam_review_translator/core/        @farrel-username @mahesa-username @lukas-username
+/src/steam_review_translator/pipeline.py  @farrel-username @mahesa-username @lukas-username
+/configs/pipeline.yaml                    @farrel-username @mahesa-username @lukas-username
+
+# Task 1: sentiment
+/src/steam_review_translator/sentiment/   @farrel-username
+/experiments/task1_sentiment/             @farrel-username
+/configs/task1/                           @farrel-username
+
+# Task 2: aspects
+/src/steam_review_translator/aspect/      @mahesa-username
+/experiments/task2_aspect/                @mahesa-username
+/configs/task2/                           @mahesa-username
+
+# Task 3: summarization
+/src/steam_review_translator/summarization/  @lukas-username
+/experiments/task3_summarization/            @lukas-username
+/configs/task3/                              @lukas-username
