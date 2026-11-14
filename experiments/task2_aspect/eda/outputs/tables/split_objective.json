@@ -1,0 +1,7 @@
+{
+  "objective": 0.0178205593506415,
+  "js_divergence_bits": 0.004651511731593894,
+  "pos_share_gap": 0.005766666666666698,
+  "hit_rate_gap": 0.02057142857142852,
+  "combinations_checked": 120
+}

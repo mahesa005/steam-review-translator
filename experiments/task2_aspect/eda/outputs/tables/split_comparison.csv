@@ -1,0 +1,14 @@
+metric,train,test
+share_gameplay,0.1844,0.1939
+share_story,0.1453,0.1829
+share_graphics,0.0873,0.0823
+share_audio,0.0521,0.0412
+share_performance,0.1053,0.0989
+share_price,0.1689,0.1342
+share_multiplayer,0.1115,0.1100
+share_difficulty,0.0586,0.0768
+share_content,0.0867,0.0799
+hit_rate,0.3597,0.3803
+pos_share_clean,0.5757,0.5699
+aspect_entropy,0.9207,0.9252
+median_chars_clean,223.4286,338.0000

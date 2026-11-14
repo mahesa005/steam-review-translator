@@ -1,0 +1,12 @@
+game_id,game_name,split,reviews,sentences,informative_sentences,recommended_share,verify_hours_low,verify_hours_high
+7520,Two Worlds II HD,train,150,961,899,0.5203,1.3347,2.6694
+9930,Test Drive Unlimited 2,train,150,825,758,0.5382,1.1458,2.2917
+34870,Sniper: Ghost Warrior 2,train,150,691,633,0.6903,0.9597,1.9194
+48220,Might & Magic: Heroes VI,train,150,902,839,0.3514,1.2528,2.5056
+231430,Company of Heroes 2,train,150,687,636,0.4920,0.9542,1.9083
+263560,Paper Sorcerer,train,150,1046,991,0.7878,1.4528,2.9056
+289690,LARA CROFT AND THE TEMPLE OF OSIRIS™,train,150,971,898,0.4933,1.3486,2.6972
+217920,Alien Rage - Unlimited,test,150,1114,997,0.6041,1.5472,3.0944
+236870,HITMAN™,test,150,1243,1129,0.6661,1.7264,3.4528
+245760,TRANSFORMERS: Rise of the Dark Spark,test,150,1705,1567,0.2457,2.3681,4.7361
+,TOTAL,"",1500,10145,9347,,14.0903,28.1806
