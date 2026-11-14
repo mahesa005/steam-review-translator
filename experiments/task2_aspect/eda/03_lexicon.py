@@ -139,11 +139,14 @@ def main() -> int:
                     st = kw_stats.setdefault((aspect, keyword), {"n": 0, "susp": 0, "res": []})
                     is_susp = any(c in low for c in susp_cfg.get(keyword, []))
                     st["susp"] += is_susp
-                    reservoir(st, ("[SUSPICIOUS] " if is_susp else "") + E.normalize_ws(text)[:160])
+                    reservoir(
+                        st,
+                        ("[SUSPICIOUS] " if is_susp else "") + E.normalize_ws(text)[:160].rstrip(),
+                    )
                 for w in {m.lower() for m in amb_re.findall(text)}:
                     st = amb_stats[w]
                     st["susp"] += any(c in low for c in susp_cfg.get(w, []))
-                    reservoir(st, E.normalize_ws(text)[:160])
+                    reservoir(st, E.normalize_ws(text)[:160].rstrip())
                 if not lab and nw >= informative:
                     n_nohit += 1
                     toks = tokenize(lem)

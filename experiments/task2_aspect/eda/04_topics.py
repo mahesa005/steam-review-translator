@@ -267,7 +267,7 @@ def main() -> int:
                         "candidate_theme": theme_of(words[t], themes),
                         "cv": cv_by[t],
                         "top_words": " ".join(words[t]),
-                        "example": E.normalize_ws(docs[members[0]])[:140],
+                        "example": E.normalize_ws(docs[members[0]])[:140].rstrip(),
                     }
                 )
 

@@ -114,7 +114,8 @@ def save_json(obj: Any, name: str) -> Path:
     """Write a small committed JSON summary to ``outputs/tables/<name>.json``."""
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     path = TABLES_DIR / f"{name}.json"
-    path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    text = json.dumps(obj, indent=2, ensure_ascii=False) + "\n"
+    path.write_text(text, encoding="utf-8", newline="\n")
     return path
 
 

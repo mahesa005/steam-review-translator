@@ -416,7 +416,7 @@ def main() -> int:
     a(table("candidate_sample_summary"))
 
     out = E.OUT_DIR / "eda_report.md"
-    out.write_text("\n".join(md) + "\n", encoding="utf-8")
+    out.write_text("\n".join(md).rstrip() + "\n", encoding="utf-8", newline="\n")
     log.info("report -> %s (%d lines)", out, len(md))
     return 0
 
