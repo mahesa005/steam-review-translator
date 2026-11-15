@@ -86,9 +86,11 @@ topics:
     nostalgia: [childhood, nostalgia, memories, classic, old]
 
 selection:
-  n_games: 10
+  n_games: 13                  # 9 train / 2 val / 2 test (~70/15/15 by game)
   n_backups: 3
-  n_train: 7
+  n_train: 9
+  n_val: 2
+  n_test: 2
   shortlist: 150               # top games by metric score that get Steam metadata fetched
   steam_request_interval_s: 1.6
   min_aspects_5pct: 5          # soft target used in the score, not a hard filter
@@ -115,5 +117,5 @@ selection:
                  Psychological Horror, Character Customization, Choices Matter, Loot]
 
 labeling_sample:
-  reviews_per_game: 50                  # reduced from 150 to keep manual verification small
+  reviews_per_game: 75                  # owner decision: LLM pre-labels, owner verifies
   verify_seconds_per_sentence: [5, 10]   # low/high assumption for checking one LLM label

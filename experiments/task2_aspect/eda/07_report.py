@@ -344,9 +344,11 @@ def main() -> int:
         f"{cfg['selection']['negative_share_threshold']:.0%} negative reviews, at most "
         f"{cfg['selection']['max_per_primary_tag']} game per primary SteamSpy tag and "
         f"{cfg['selection']['max_per_store_genre']} per Steam genre. Genres come from the Steam "
-        "store / SteamSpy, not inferred from names. Split: all 7/3 partitions searched, "
-        "minimizing JS divergence of mean aspect profiles + ½ gap in recommend share + ½ gap in "
-        "hit rate, with >= 1 negative-heavy game in test.\n"
+        "store / SteamSpy, not inferred from names. Split by game: all "
+        f"{cfg['selection']['n_train']}/{cfg['selection']['n_val']}/{cfg['selection']['n_test']} "
+        "(train/val/test) partitions searched, minimizing, for val and for test against train, "
+        "JS divergence of mean aspect profiles + ½ gap in recommend share + ½ gap in hit rate, "
+        "with >= 1 negative-heavy game in both val and test.\n"
     )
     sel = E.OUT_DIR / "selected_games.csv"
     if sel.is_file():
@@ -375,14 +377,18 @@ def main() -> int:
         )
     )
     a(table("split_comparison"))
+    for other in ("val", "test"):
+        g = split.get(f"train_vs_{other}", {})
+        a(
+            f"- train vs {other}: JS divergence {g.get('js_divergence_bits', float('nan')):.4f} "
+            f"bits, recommend-share gap {g.get('pos_share_gap', float('nan')):.3f}, hit-rate gap "
+            f"{g.get('hit_rate_gap', float('nan')):.3f}"
+        )
     a(
-        f"Split objective (`tables/split_objective.json`): JS divergence "
-        f"{split.get('js_divergence_bits', float('nan')):.4f} bits, recommend-share gap "
-        f"{split.get('pos_share_gap', float('nan')):.3f}, hit-rate gap "
-        f"{split.get('hit_rate_gap', float('nan')):.3f}, over "
-        f"{split.get('combinations_checked', 0)} partitions.\n"
+        f"\nBest of {split.get('partitions_checked', 0):,} partitions "
+        "(`tables/split_objective.json`).\n"
     )
-    a(fig("split_comparison", "Train vs test aspect profile"))
+    a(fig("split_comparison", "Train / val / test aspect profile"))
     a("Top 20 scored candidates:\n")
     a(
         table(
