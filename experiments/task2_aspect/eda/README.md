@@ -2,6 +2,7 @@
 
 Research code for choosing the labeling corpus and games **before** LLM labeling.
 Not part of the library. Results: [`outputs/eda_report.md`](outputs/eda_report.md).
+Every change that affects the results is recorded in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Setup (once)
 
