@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from typing import Any
 
 from steam_review_translator.aspect.aggregate import aggregate
-from steam_review_translator.aspect.sentences import split_sentences
+from steam_review_translator.aspect.sentences import split_reviews
 from steam_review_translator.core.config import ComponentConfig, PipelineConfig
 from steam_review_translator.core.interfaces import (
     AspectTagger,
@@ -70,7 +70,8 @@ class Pipeline:
             sentiment = self.sentiment.analyze(inp.reviews)
 
         with _stage("task2.aspect"):
-            sentences = [s for review in inp.reviews for s in split_sentences(review.text)]
+            per_review = split_reviews([review.text for review in inp.reviews])
+            sentences = [s for sents in per_review for s in sents]
             labels = self.tagger.tag(sentences)
             if len(labels) != len(sentences):
                 raise ValueError(

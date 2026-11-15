@@ -62,32 +62,6 @@ def test_self_repeat() -> None:
     assert not flags(long_review)["self_repeat"]
 
 
-def test_unescape_html() -> None:
-    assert E.unescape_html("Tips &amp; tricks &gt; guides") == "Tips & tricks > guides"
-    assert E.unescape_html("HITMAN&amp;amp;trade;") == "HITMAN™"  # double-encoded
-    assert E.unescape_html("no entities here") == "no entities here"
-
-
-def test_split_segments_on_multispace() -> None:
-    text = "Great game.  Would buy again\n\nbut the price is high"
-    assert E.split_segments(text) == ["Great game.", "Would buy again", "but the price is high"]
-    assert E.split_segments(text, split_on_multispace=False) == [E.normalize_ws(text)]
-
-
-def test_chunk_runon() -> None:
-    words = ("i love this game and the music is great but the servers lag a lot " * 4).split()
-    spans = E.chunk_runon(words, max_tokens=20)
-    assert spans[0][0] == 0 and spans[-1][1] == len(words)
-    assert all(e - s <= 20 for s, e in spans)
-    assert all(a[1] == b[0] for a, b in zip(spans, spans[1:], strict=False))  # contiguous
-    assert E.chunk_runon(["short", "one"], max_tokens=20) == [(0, 2)]
-
-
-def test_chunk_runon_hard_cut_without_breaks() -> None:
-    spans = E.chunk_runon(["w"] * 45, max_tokens=20)
-    assert spans == [(0, 20), (20, 40), (40, 45)]
-
-
 @pytest.fixture(scope="module")
 def nlp() -> Any:
     spacy = pytest.importorskip("spacy")
@@ -96,15 +70,6 @@ def nlp() -> Any:
     except OSError:
         pytest.skip("en_core_web_sm not installed")
     return spacy  # unreachable
-
-
-def test_iter_sentences(nlp: Any) -> None:
-    items = [("Fun combat. Bad lag!  Story is ok", "r1"), ("no punctuation at all here", "r2")]
-    out = list(E.iter_sentences(nlp, items, split_on_multispace=True, runon_max_tokens=50))
-    r1 = [s.text for s in out if s.key == "r1"]
-    assert r1 == ["Fun combat.", "Bad lag!", "Story is ok"]
-    assert [s.sent_idx for s in out if s.key == "r1"] == [0, 1, 2]
-    assert [s.text for s in out if s.key == "r2"] == ["no punctuation at all here"]
 
 
 def test_lemma_lexicon_matcher(nlp: Any) -> None:

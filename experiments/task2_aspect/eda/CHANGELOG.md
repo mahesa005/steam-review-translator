@@ -6,6 +6,17 @@ Each entry says what changed, why, and what it did to the outputs, so numbers in
 
 ## 2026-11-16
 
+### One sentence splitter for the pipeline, the EDA and the labeling sample
+- **What:** the splitter (HTML decoding, line-break/2+-space segments, spaCy sentencizer, run-on
+  chunking) moved from `edalib.py` to the library, `steam_review_translator.aspect.sentences`.
+  The pipeline now uses it (`split_reviews`) instead of the old regex splitter; `edalib`
+  re-exports it. spaCy (no model) became a core dependency (owner decision).
+- **Why:** the labeling sample and the pipeline split reviews differently, so labels made on the
+  sample would not match the sentences a tagger sees in the pipeline.
+- **Impact:** none on any EDA output: the labeling sample is byte-identical, and the pipeline
+  splitter reproduces all 7,002 sample sentences exactly. `spacy.blank("en")` gives the same
+  boundaries as `en_core_web_sm` (checked on all 975 sample reviews) and is ~20x faster.
+
 ### Step 03 rerun with the current (chunked) code
 - **What:** reran `03_lexicon.py` on the cached lexicon hits.
 - **Why:** the committed step 03 tables came from the first full run, made with the older,

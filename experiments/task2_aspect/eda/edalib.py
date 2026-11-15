@@ -4,27 +4,34 @@ Pure-Python parts (text filters, run-on chunking) have no heavy dependencies so 
 unit-tested in CI; spaCy / fastText / polars are imported lazily inside the functions that
 need them.
 
-Candidates for promotion to ``steam_review_translator.aspect`` once Task 2 settles:
-``split_segments`` + ``chunk_runon`` (sentence splitting) and ``LemmaLexiconMatcher``.
+Sentence splitting and HTML decoding live in ``steam_review_translator.aspect.sentences``
+(re-exported here). Candidate for promotion: ``LemmaLexiconMatcher``.
 """
 
 from __future__ import annotations
 
 import hashlib
-import html
 import json
 import re
 import sys
 import time
 import unicodedata
 import zlib
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from steam_review_translator.aspect.lexicon import Lexicon, LexiconMatcher, load_lexicon, tokenize
+from steam_review_translator.aspect.sentences import (  # noqa: F401 - re-exported for EDA scripts
+    Sentence,
+    chunk_runon,
+    iter_sentences,
+    normalize_ws,
+    split_segments,
+    unescape_html,
+)
 from steam_review_translator.core.config import get_path, load_yaml, project_root
 from steam_review_translator.core.logging import get_logger
 from steam_review_translator.core.schemas import Aspect
@@ -164,21 +171,6 @@ _ART_RANGES = ((0x2500, 0x259F), (0x25A0, 0x25FF), (0x2800, 0x28FF))
 _IGNORED_SYMBOLS = {"♥"}
 
 
-def unescape_html(text: str, max_rounds: int = 3) -> str:
-    """Decode HTML entities, repeating for double-encoded text (``&amp;amp;trade;`` -> ™)."""
-    for _ in range(max_rounds):
-        decoded = html.unescape(text)
-        if decoded == text:
-            break
-        text = decoded
-    return text
-
-
-def normalize_ws(text: str) -> str:
-    """Collapse all whitespace runs to one space and strip."""
-    return _WS.sub(" ", text).strip()
-
-
 @dataclass(frozen=True)
 class FilterParams:
     """Thresholds for :func:`text_flags` (see ``filters`` in eda.yaml)."""
@@ -299,111 +291,17 @@ class LangDetector:
 # --------------------------------------------------------------------------------------
 # sentence splitting + lemmatization
 # --------------------------------------------------------------------------------------
-_MULTISPACE = re.compile(r"\s{2,}|\n+")
-_CONJ_BREAKS = {"but", "and", "so", "because", "although", "though", "however", "also"}
-_PUNCT_BREAKS = {",", ";", ":", "-", "--", "|", "/"}
-
-
-def split_segments(text: str, split_on_multispace: bool = True) -> list[str]:
-    """Cut a review at line breaks (and, for this dump, at 2+ spaces = former line breaks)."""
-    parts = _MULTISPACE.split(text) if split_on_multispace else [text]
-    return [s for s in (normalize_ws(p) for p in parts) if s]
-
-
-def chunk_runon(words: Sequence[str], max_tokens: int, min_chunk: int = 8) -> list[tuple[int, int]]:
-    """Split a long token run (no sentence punctuation) into ``(start, end)`` ranges.
-
-    Cuts before conjunctions and after ``, ; :`` once the current chunk has ``min_chunk``
-    tokens; any chunk still > ``max_tokens`` is cut hard every ``max_tokens`` tokens.
-    """
-    n = len(words)
-    if n <= max_tokens:
-        return [(0, n)]
-    spans: list[tuple[int, int]] = []
-    start = 0
-    for i, w in enumerate(words):
-        lw = w.lower()
-        if i - start >= min_chunk and lw in _CONJ_BREAKS:
-            spans.append((start, i))
-            start = i
-        elif i + 1 - start >= min_chunk and lw in _PUNCT_BREAKS:
-            spans.append((start, i + 1))
-            start = i + 1
-    if start < n:
-        spans.append((start, n))
-    out: list[tuple[int, int]] = []
-    for s, e in spans:
-        while e - s > max_tokens:
-            out.append((s, s + max_tokens))
-            s += max_tokens
-        if e > s:
-            out.append((s, e))
-    return out
-
-
 def load_nlp(model: str = "en_core_web_sm") -> Any:
-    """spaCy pipeline: tokenizer + tagger + lemmatizer + rule-based sentencizer."""
+    """spaCy pipeline: tokenizer + tagger + lemmatizer + rule-based sentencizer.
+
+    Sentence boundaries are the library splitter's (``iter_sentences`` below is imported from
+    ``steam_review_translator.aspect.sentences``); the model only adds lemmas.
+    """
     import spacy
 
     nlp = spacy.load(model, exclude=["parser", "ner"])
     nlp.add_pipe("sentencizer")
     return nlp
-
-
-@dataclass(frozen=True)
-class Sentence:
-    """One sentence produced by :func:`iter_sentences`."""
-
-    key: Any
-    sent_idx: int
-    text: str
-    lemmas: str  # lowercase lemmas joined by single spaces
-    n_words: int  # tokens that are not punctuation / whitespace
-    runon_split: bool
-
-
-def iter_sentences(
-    nlp: Any,
-    items: Iterable[tuple[str, Any]],
-    *,
-    split_on_multispace: bool,
-    runon_max_tokens: int,
-    batch_size: int = 512,
-    n_process: int = 1,
-) -> Iterator[Sentence]:
-    """Split ``(text, key)`` items into sentences, in input order per key.
-
-    Pipeline: line-break/multispace segments -> spaCy sentencizer -> run-on chunking.
-    """
-
-    def segments() -> Iterator[tuple[str, Any]]:
-        for text, key in items:
-            for seg in split_segments(text, split_on_multispace):
-                yield seg, key
-
-    counters: dict[Any, int] = {}
-    docs = nlp.pipe(segments(), as_tuples=True, batch_size=batch_size, n_process=n_process)
-    for doc, key in docs:
-        for sent in doc.sents:
-            toks = [t for t in sent if not t.is_space]
-            if not toks:
-                continue
-            ranges = chunk_runon([t.text for t in toks], runon_max_tokens)
-            for s, e in ranges:
-                chunk = toks[s:e]
-                text = "".join(t.text_with_ws for t in chunk).strip()
-                if not text:
-                    continue
-                idx = counters.get(key, 0)
-                counters[key] = idx + 1
-                yield Sentence(
-                    key=key,
-                    sent_idx=idx,
-                    text=text,
-                    lemmas=" ".join(t.lemma_.lower() for t in chunk),
-                    n_words=sum(not t.is_punct for t in chunk),
-                    runon_split=len(ranges) > 1,
-                )
 
 
 # --------------------------------------------------------------------------------------
