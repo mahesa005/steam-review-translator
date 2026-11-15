@@ -91,10 +91,13 @@ strongest) or map them to `other`.
 
 ### (f) Manual-verification workload
 
-1,500 reviews (150 × 10 games) → **10,145 sentences** (9,347 with >= 4 tokens). At 5–10 s
-per sentence to verify an LLM label that is **14–28 hours**, or about 5–9 h each if three
-people share it (`candidate_sample_summary.csv`). The longest is Transformers: 1,705
-sentences. Halving to 75 reviews per game would give about 5,100 sentences.
+Scope reduced to **50 reviews per game** (decision of the Task 2 owner, 2026-11-16):
+500 reviews → **3,609 sentences** (3,321 with >= 4 tokens): train 2,334 sentences from 7
+games, test 1,275 from 3 games. At 5–10 s per sentence to verify an LLM label that is
+**5–10 hours** (`candidate_sample_summary.csv`). The longest is Transformers: 575
+sentences. The 50-review sample is the first 50 of the same seeded per-game shuffle, so it
+is a strict subset of the earlier 150-review draw (10,145 sentences, 14–28 h) and can be
+grown later without relabeling.
 
 ### (g) Risks and open questions
 

@@ -115,5 +115,5 @@ selection:
                  Psychological Horror, Character Customization, Choices Matter, Loot]
 
 labeling_sample:
-  reviews_per_game: 150
+  reviews_per_game: 50                  # reduced from 150 to keep manual verification small
   verify_seconds_per_sentence: [5, 10]   # low/high assumption for checking one LLM label

@@ -1,6 +1,6 @@
 # Task 2 EDA: Steam reviews for aspect-based opinion mining
 
-Generated 2026-11-14 by `experiments/task2_aspect/eda/07_report.py`. Rerun: see `experiments/task2_aspect/eda/README.md`.
+Generated 2026-11-16 by `experiments/task2_aspect/eda/07_report.py`. Rerun: see `experiments/task2_aspect/eda/README.md`.
 
 - Raw data: `data/raw/steam.csv.bz2`, 505,939,174 bytes, sha256 `35f4d0c7833220c5209c2319b17911ca446f11b6a7db1971eb4ad33d2b4c2da4`.
 - Lexicon: `configs/task2/lexicon.yaml` sha256 `3dfcbe1b520ff801…` (git blob `935ea737fe`). **Status: PRELIMINARY placeholder seed lexicon. Every lexicon-based number (hit rates, aspect shares, purity, game scores, the selection itself) is PRELIMINARY.**
@@ -101,10 +101,13 @@ strongest) or map them to `other`.
 
 ### (f) Manual-verification workload
 
-1,500 reviews (150 × 10 games) → **10,145 sentences** (9,347 with >= 4 tokens). At 5–10 s
-per sentence to verify an LLM label that is **14–28 hours**, or about 5–9 h each if three
-people share it (`candidate_sample_summary.csv`). The longest is Transformers: 1,705
-sentences. Halving to 75 reviews per game would give about 5,100 sentences.
+Scope reduced to **50 reviews per game** (decision of the Task 2 owner, 2026-11-16):
+500 reviews → **3,609 sentences** (3,321 with >= 4 tokens): train 2,334 sentences from 7
+games, test 1,275 from 3 games. At 5–10 s per sentence to verify an LLM label that is
+**5–10 hours** (`candidate_sample_summary.csv`). The longest is Transformers: 575
+sentences. The 50-review sample is the first 50 of the same seeded per-game shuffle, so it
+is a strict subset of the earlier 150-review draw (10,145 sentences, 14–28 h) and can be
+grown later without relabeling.
 
 ### (g) Risks and open questions
 
@@ -789,20 +792,20 @@ _Source: `tables/game_candidates_scored.csv` (first 20 of 2346 rows)_
 
 ## 6. Candidate labeling sample (not labeled, not committed)
 
-`data/processed/candidate_sample.csv` and `.jsonl`: 150 clean English reviews per selected game, uniform random from the game's full clean pool, seed 42, same splitter. Columns: game_id, game_name, split, review_id (raw CSV row number), sentence_id (`<review_id>-<k>`), sentence, recommended, n_words. Workload assumes [5, 10] seconds to verify one LLM label.
+`data/processed/candidate_sample.csv` and `.jsonl`: 50 clean English reviews per selected game, uniform random from the game's full clean pool, seed 42, same splitter. Columns: game_id, game_name, split, review_id (raw CSV row number), sentence_id (`<review_id>-<k>`), sentence, recommended, n_words. Workload assumes [5, 10] seconds to verify one LLM label.
 
 | game_id | game_name | split | reviews | sentences | informative_sentences | recommended_share | verify_hours_low | verify_hours_high |
 |---|---|---|---|---|---|---|---|---|
-| 7,520 | Two Worlds II HD | train | 150 | 961 | 899 | 0.520 | 1.335 | 2.669 |
-| 9,930 | Test Drive Unlimited 2 | train | 150 | 825 | 758 | 0.538 | 1.146 | 2.292 |
-| 34,870 | Sniper: Ghost Warrior 2 | train | 150 | 691 | 633 | 0.690 | 0.960 | 1.919 |
-| 48,220 | Might & Magic: Heroes VI | train | 150 | 902 | 839 | 0.351 | 1.253 | 2.506 |
-| 231,430 | Company of Heroes 2 | train | 150 | 687 | 636 | 0.492 | 0.954 | 1.908 |
-| 263,560 | Paper Sorcerer | train | 150 | 1,046 | 991 | 0.788 | 1.453 | 2.906 |
-| 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | 150 | 971 | 898 | 0.493 | 1.349 | 2.697 |
-| 217,920 | Alien Rage - Unlimited | test | 150 | 1,114 | 997 | 0.604 | 1.547 | 3.094 |
-| 236,870 | HITMAN™ | test | 150 | 1,243 | 1,129 | 0.666 | 1.726 | 3.453 |
-| 245,760 | TRANSFORMERS: Rise of the Dark Spark | test | 150 | 1,705 | 1,567 | 0.246 | 2.368 | 4.736 |
-|  | TOTAL |  | 1,500 | 10,145 | 9,347 |  | 14.090 | 28.181 |
+| 7,520 | Two Worlds II HD | train | 50 | 316 | 291 | 0.668 | 0.439 | 0.878 |
+| 9,930 | Test Drive Unlimited 2 | train | 50 | 325 | 295 | 0.526 | 0.451 | 0.903 |
+| 34,870 | Sniper: Ghost Warrior 2 | train | 50 | 269 | 249 | 0.710 | 0.374 | 0.747 |
+| 48,220 | Might & Magic: Heroes VI | train | 50 | 289 | 266 | 0.384 | 0.401 | 0.803 |
+| 231,430 | Company of Heroes 2 | train | 50 | 330 | 297 | 0.379 | 0.458 | 0.917 |
+| 263,560 | Paper Sorcerer | train | 50 | 427 | 405 | 0.892 | 0.593 | 1.186 |
+| 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | 50 | 378 | 349 | 0.619 | 0.525 | 1.050 |
+| 217,920 | Alien Rage - Unlimited | test | 50 | 356 | 326 | 0.716 | 0.494 | 0.989 |
+| 236,870 | HITMAN™ | test | 50 | 344 | 313 | 0.584 | 0.478 | 0.956 |
+| 245,760 | TRANSFORMERS: Rise of the Dark Spark | test | 50 | 575 | 530 | 0.190 | 0.799 | 1.597 |
+|  | TOTAL |  | 500 | 3,609 | 3,321 |  | 5.013 | 10.025 |
 
 _Source: `tables/candidate_sample_summary.csv`_
