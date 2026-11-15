@@ -1,7 +1,8 @@
 """Step 6: reproducible candidate labeling sample (NOT labeled). Data -> data/processed/.
 
-For each of the 10 selected games: 150 clean English reviews drawn uniformly at random from
-the game's full clean pool (seed 42), split with the same splitter as step 2.
+For each selected game (train/val/test, not backups): `labeling_sample.reviews_per_game`
+clean English reviews drawn uniformly at random from the game's full clean pool (seed 42),
+HTML entities decoded, split with the same splitter as step 2.
 Ids: review_id = row number in the raw CSV; sentence_id = "<review_id>-<k>" (k = 0-based
 sentence index within the review). Both are stable for a fixed config + splitter.
 """
@@ -48,7 +49,10 @@ def main() -> int:
         r["review_id"]: r for r in reviews.select("review_id", "app_id", "review_score").to_dicts()
     }
     rows = []
-    items = zip(reviews["review_text"].to_list(), reviews["review_id"].to_list(), strict=True)
+    # The dump still contains HTML entities (&amp; &gt; &lt;); decode them so the labeling
+    # sample shows the text a human (and an LLM) would read. Earlier steps keep the raw text.
+    texts_clean = [E.unescape_html(t) for t in reviews["review_text"].to_list()]
+    items = zip(texts_clean, reviews["review_id"].to_list(), strict=True)
     for s in E.iter_sentences(
         nlp,
         items,

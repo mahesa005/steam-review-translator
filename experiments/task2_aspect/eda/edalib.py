@@ -11,6 +11,7 @@ Candidates for promotion to ``steam_review_translator.aspect`` once Task 2 settl
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import re
 import sys
@@ -161,6 +162,16 @@ _REPEAT_TEMPLATE = r"(\S)\1{%d,}"
 _ART_RANGES = ((0x2500, 0x259F), (0x25A0, 0x25FF), (0x2800, 0x28FF))
 # Steam's profanity filter renders swear words as hearts; don't count those as art.
 _IGNORED_SYMBOLS = {"♥"}
+
+
+def unescape_html(text: str, max_rounds: int = 3) -> str:
+    """Decode HTML entities, repeating for double-encoded text (``&amp;amp;trade;`` -> ™)."""
+    for _ in range(max_rounds):
+        decoded = html.unescape(text)
+        if decoded == text:
+            break
+        text = decoded
+    return text
 
 
 def normalize_ws(text: str) -> str:

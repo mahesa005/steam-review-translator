@@ -62,6 +62,12 @@ def test_self_repeat() -> None:
     assert not flags(long_review)["self_repeat"]
 
 
+def test_unescape_html() -> None:
+    assert E.unescape_html("Tips &amp; tricks &gt; guides") == "Tips & tricks > guides"
+    assert E.unescape_html("HITMAN&amp;amp;trade;") == "HITMAN™"  # double-encoded
+    assert E.unescape_html("no entities here") == "no entities here"
+
+
 def test_split_segments_on_multispace() -> None:
     text = "Great game.  Would buy again\n\nbut the price is high"
     assert E.split_segments(text) == ["Great game.", "Would buy again", "but the price is high"]
