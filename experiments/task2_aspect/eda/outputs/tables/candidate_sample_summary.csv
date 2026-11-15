@@ -2,14 +2,14 @@ game_id,game_name,split,reviews,sentences,informative_sentences,recommended_shar
 48220,Might & Magic: Heroes VI,val,75,437,405,0.3593,0.6069,1.2139
 263560,Paper Sorcerer,val,75,564,538,0.8245,0.7833,1.5667
 9930,Test Drive Unlimited 2,train,75,425,386,0.4988,0.5903,1.1806
-207210,Tony Hawks Pro Skater HD,train,75,386,362,0.4741,0.5361,1.0722
+207210,Tony Hawks Pro Skater HD,train,75,384,360,0.4766,0.5333,1.0667
 217920,Alien Rage - Unlimited,train,75,561,509,0.6738,0.7792,1.5583
-231430,Company of Heroes 2,train,75,462,422,0.4113,0.6417,1.2833
-236870,HITMAN™,train,75,555,509,0.5405,0.7708,1.5417
+231430,Company of Heroes 2,train,75,462,423,0.4113,0.6417,1.2833
+236870,HITMAN™,train,75,553,507,0.5425,0.7681,1.5361
 245760,TRANSFORMERS: Rise of the Dark Spark,train,75,977,890,0.1720,1.3569,2.7139
 289690,LARA CROFT AND THE TEMPLE OF OSIRIS™,train,75,545,500,0.5009,0.7569,1.5139
 320820,Toren,train,75,682,626,0.6891,0.9472,1.8944
 363680,Battlefleet Gothic: Armada (Classic),train,75,561,522,0.5900,0.7792,1.5583
 7520,Two Worlds II HD,test,75,459,426,0.5882,0.6375,1.2750
 34870,Sniper: Ghost Warrior 2,test,75,392,356,0.7321,0.5444,1.0889
-,TOTAL,"",975,7006,6451,,9.7306,19.4611
+,TOTAL,"",975,7002,6448,,9.7250,19.4500

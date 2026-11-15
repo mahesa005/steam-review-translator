@@ -97,8 +97,8 @@ strongest) or map them to `other`.
 ### (f) Manual-verification workload
 
 Owner decision (2026-11-16): an LLM pre-labels every sentence and the owner verifies, with
-**75 reviews per game** over the 13 games: 975 reviews → **7,006 sentences** (6,451 with >= 4
-tokens). By sentences the split is train 5,154 (74%) / val 1,001 (14%) / test 851 (12%);
+**75 reviews per game** over the 13 games: 975 reviews → **7,002 sentences** (6,448 with >= 4
+tokens). By sentences the split is train 5,150 (74%) / val 1,001 (14%) / test 851 (12%);
 Transformers alone has 977 sentences. At 5–10 s per sentence to verify an LLM label that is
 **10–19 hours** (`candidate_sample_summary.csv`). For the original 10 games the 75 reviews
 are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earlier
@@ -118,7 +118,6 @@ are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earli
 5. Language ID on very short text is unreliable, but those reviews are dropped as short anyway.
 6. Embeddings ran on CPU (CUDA torch was not installed; the 2.7 GB download was too slow).
    Results are the same; only the run time differs.
-7. Steps 03/04 of this run were produced by the pre-chunking version of `03_lexicon.py`.
-   Counts and hit rates match the current code exactly (checked on the smoke sample); the
-   `keyword_quality.csv` example sentences and the ambiguous-word counts (taken from a
-   400k-sentence sample) differ. Rerun step 03 to regenerate them with the current code.
+7. The labeling sample has HTML entities decoded (`&amp;` → `&`, incl. double-encoded
+   ones); the corpus statistics in steps 01–04 were computed on the raw text, where entities
+   affect well under 1% of sentences. See `../CHANGELOG.md`.

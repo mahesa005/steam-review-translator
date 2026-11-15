@@ -107,8 +107,8 @@ strongest) or map them to `other`.
 ### (f) Manual-verification workload
 
 Owner decision (2026-11-16): an LLM pre-labels every sentence and the owner verifies, with
-**75 reviews per game** over the 13 games: 975 reviews → **7,006 sentences** (6,451 with >= 4
-tokens). By sentences the split is train 5,154 (74%) / val 1,001 (14%) / test 851 (12%);
+**75 reviews per game** over the 13 games: 975 reviews → **7,002 sentences** (6,448 with >= 4
+tokens). By sentences the split is train 5,150 (74%) / val 1,001 (14%) / test 851 (12%);
 Transformers alone has 977 sentences. At 5–10 s per sentence to verify an LLM label that is
 **10–19 hours** (`candidate_sample_summary.csv`). For the original 10 games the 75 reviews
 are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earlier
@@ -128,10 +128,9 @@ are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earli
 5. Language ID on very short text is unreliable, but those reviews are dropped as short anyway.
 6. Embeddings ran on CPU (CUDA torch was not installed; the 2.7 GB download was too slow).
    Results are the same; only the run time differs.
-7. Steps 03/04 of this run were produced by the pre-chunking version of `03_lexicon.py`.
-   Counts and hit rates match the current code exactly (checked on the smoke sample); the
-   `keyword_quality.csv` example sentences and the ambiguous-word counts (taken from a
-   400k-sentence sample) differ. Rerun step 03 to regenerate them with the current code.
+7. The labeling sample has HTML entities decoded (`&amp;` → `&`, incl. double-encoded
+   ones); the corpus statistics in steps 01–04 were computed on the raw text, where entities
+   affect well under 1% of sentences. See `../CHANGELOG.md`.
 
 ## 1. Corpus overview
 
@@ -529,11 +528,11 @@ Five random example sentences per keyword; `[SUSPICIOUS]` marks a configured sus
 
 | aspect | keyword | n_hits | suspicious_share | suspicious_contexts | example_1 | example_2 |
 |---|---|---|---|---|---|---|
-| price | worth | 47,710 | 0.466 | worth it; worth the | The rewards are well worth he work. | Overall, it's a good game that's definitely worth checking out. |
-| overall | recommend | 57,558 | 0.158 | not recommend; wouldn't recommend; would not recommend; don't recommend; can't recommend | Feels 1000x better than the alpha versions, I would recommend for both the singleplayer and multiplayer experience. | Highly Recommended 9/10 |
-| audio | sound | 21,038 | 0.102 | sounds like; sound like; sounds good; sound good; sounds fun; sounds great | TLDR if you like 2D shoot em up's and the main mechanic sounds interesting to you its worth playing. | I had the luxury of having expansions added one at a time, having all 6 expansions available as a bundle sounds amazing, and is a great deal, but will make the  |
-| difficulty | balance | 5,149 | 0.088 | balance of | A very nice balance between the randomness and challenge of perma-death featured in most roguelikes, yet also with the ability to keep some of your progress for | Hopefully Blackbird will find a way to balance it so that the less adaptable amongst us can keep up, before too many leave the game behind as a flawed gem in th |
-| content | hours | 55,111 | 0.087 | hours played; hours in; hours on record | The campaign is very short, I was able to beat it in less than 4 hours. | I was first introduced to this game as a kid and I spent many many hours playing it. |
+| price | worth | 47,710 | 0.466 | worth it; worth the | Cute game, fresh character designs, not exactly worth full price. | An OK game, not really worth more than £5, in al honesty as it's a poor copy of EA's Fight Night series. |
+| overall | recommend | 57,558 | 0.158 | not recommend; wouldn't recommend; would not recommend; don't recommend; can't recommend | Hense why i recommend this game. | [SUSPICIOUS] I previouly did not recommend the game, but had high hopes it could be fixed] |
+| audio | sound | 21,038 | 0.102 | sounds like; sound like; sounds good; sound good; sounds fun; sounds great | Overall: Graphic: 7/10 Sounds: 8/10 Longevity: 5/10 Morale: 9/10 | but it doesn't need sound to be playable |
+| difficulty | balance | 5,149 | 0.088 | balance of | Developers want to make new cosmetics instead of balance changes - | [SUSPICIOUS] It really is the perfect balance of....well, everything. |
+| content | hours | 55,111 | 0.087 | hours played; hours in; hours on record | Two hours to finish it (and I jumped a lot out of water just for fun). | While this game does seem to have replayability for achievements and such, you can suspect a much shorter experience with SteamWorld Dig (about 4 hours for a le |
 
 _Source: `tables/keyword_quality.csv`_
 
@@ -541,11 +540,11 @@ Ambiguous words (not matched) and how they are used:
 
 | keyword | n_hits | suspicious_share | example_1 | example_2 | example_3 |
 |---|---|---|---|---|---|
-| beautiful | 2,167 |  | i have not got through all of it yet but just beautiful. | Sure, it's outdated, but it can still surprise you sometimes with the beautiful tropical setting. | The graphics are beautiful, the replayablility is insane, the gameplay is awesome, and the sound is fitting. |
-| easy | 4,275 |  | just the simple easy things like that change it a lot. | Quite easy. | This lead to me clearing the first encounter, (which was easy, just rotters) clearing the second encounter (biters and grapplers) then going into the 3rd with a |
-| free | 4,128 |  | And it's free, so why not? | There is a game here, where you can go almost anywhere you'd go in a normal casino, and you get 250 free chips every 15 minutes. | Give it a go, it's free so why not. |
-| hard | 4,835 | 0.009 | There's no storyline &gt; It's hard as balls to get play &gt; | You have unlimited continues, but if you want to complete the game without continues, the game wil be hard. | Superbe pixel art game, wonderful soundtrack, but hard as hell! |
-| smooth | 734 |  | They make an old game that was at times a slog into a smooth experience. | Very Talented developers here, smooth smoooth smooth. | While short the story is worth sticking around for, the gameplay is smooth and the art &amp; graphics are fantastic. |
+| beautiful | 14,098 |  | A beautiful game with a nice story. | Beautiful art style, understated music and themes, this piece serves its purpose well. | Very atmospheric, with beautiful graphics and music. |
+| easy | 28,757 |  | Easy 10/10 | Upon starting, the controls were simple and easy yet it was such an enjoyable experience, and don't get me started on that low-poly style of which the game inhe | This is an easy game to sink a couple hours into. |
+| free | 27,994 |  | Smooth running gameplay, Great castle sim whether youre looking to free build or cruise your way through the campain. | Oh and did I mention it's free? | Otherwise it was a good, short, free game. |
+| hard | 32,524 | 0.009 | Hard” is genuinely challenging yet on certain tracks or with inclement weather the AI just breaks. | Hard to the extreme, but pretty good. | It was hard and exhausting at the end. |
+| smooth | 4,769 |  | Controls are typical FPS and are smooth. ( | It even worked on a computer well below the 'minimum' Vive specs, with a little stuttering during initial setup, but smooth play afterwards. | controls are very smooth and the response rate is rather fast. |
 
 _Source: `tables/keyword_quality.csv`_
 
@@ -814,16 +813,16 @@ _Source: `tables/game_candidates_scored.csv` (first 20 of 2346 rows)_
 | 48,220 | Might & Magic: Heroes VI | val | 75 | 437 | 405 | 0.359 | 0.607 | 1.214 |
 | 263,560 | Paper Sorcerer | val | 75 | 564 | 538 | 0.825 | 0.783 | 1.567 |
 | 9,930 | Test Drive Unlimited 2 | train | 75 | 425 | 386 | 0.499 | 0.590 | 1.181 |
-| 207,210 | Tony Hawks Pro Skater HD | train | 75 | 386 | 362 | 0.474 | 0.536 | 1.072 |
+| 207,210 | Tony Hawks Pro Skater HD | train | 75 | 384 | 360 | 0.477 | 0.533 | 1.067 |
 | 217,920 | Alien Rage - Unlimited | train | 75 | 561 | 509 | 0.674 | 0.779 | 1.558 |
-| 231,430 | Company of Heroes 2 | train | 75 | 462 | 422 | 0.411 | 0.642 | 1.283 |
-| 236,870 | HITMAN™ | train | 75 | 555 | 509 | 0.540 | 0.771 | 1.542 |
+| 231,430 | Company of Heroes 2 | train | 75 | 462 | 423 | 0.411 | 0.642 | 1.283 |
+| 236,870 | HITMAN™ | train | 75 | 553 | 507 | 0.542 | 0.768 | 1.536 |
 | 245,760 | TRANSFORMERS: Rise of the Dark Spark | train | 75 | 977 | 890 | 0.172 | 1.357 | 2.714 |
 | 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | 75 | 545 | 500 | 0.501 | 0.757 | 1.514 |
 | 320,820 | Toren | train | 75 | 682 | 626 | 0.689 | 0.947 | 1.894 |
 | 363,680 | Battlefleet Gothic: Armada (Classic) | train | 75 | 561 | 522 | 0.590 | 0.779 | 1.558 |
 | 7,520 | Two Worlds II HD | test | 75 | 459 | 426 | 0.588 | 0.637 | 1.275 |
 | 34,870 | Sniper: Ghost Warrior 2 | test | 75 | 392 | 356 | 0.732 | 0.544 | 1.089 |
-|  | TOTAL |  | 975 | 7,006 | 6,451 |  | 9.731 | 19.461 |
+|  | TOTAL |  | 975 | 7,002 | 6,448 |  | 9.725 | 19.450 |
 
 _Source: `tables/candidate_sample_summary.csv`_
