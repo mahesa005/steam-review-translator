@@ -1,12 +1,15 @@
 game_id,game_name,split,reviews,sentences,informative_sentences,recommended_share,verify_hours_low,verify_hours_high
-7520,Two Worlds II HD,train,50,316,291,0.6677,0.4389,0.8778
-9930,Test Drive Unlimited 2,train,50,325,295,0.5262,0.4514,0.9028
-34870,Sniper: Ghost Warrior 2,train,50,269,249,0.7100,0.3736,0.7472
-48220,Might & Magic: Heroes VI,train,50,289,266,0.3841,0.4014,0.8028
-231430,Company of Heroes 2,train,50,330,297,0.3788,0.4583,0.9167
-263560,Paper Sorcerer,train,50,427,405,0.8923,0.5931,1.1861
-289690,LARA CROFT AND THE TEMPLE OF OSIRIS™,train,50,378,349,0.6190,0.5250,1.0500
-217920,Alien Rage - Unlimited,test,50,356,326,0.7163,0.4944,0.9889
-236870,HITMAN™,test,50,344,313,0.5843,0.4778,0.9556
-245760,TRANSFORMERS: Rise of the Dark Spark,test,50,575,530,0.1896,0.7986,1.5972
-,TOTAL,"",500,3609,3321,,5.0125,10.0250
+48220,Might & Magic: Heroes VI,val,75,437,405,0.3593,0.6069,1.2139
+263560,Paper Sorcerer,val,75,564,538,0.8245,0.7833,1.5667
+9930,Test Drive Unlimited 2,train,75,425,386,0.4988,0.5903,1.1806
+207210,Tony Hawks Pro Skater HD,train,75,386,362,0.4741,0.5361,1.0722
+217920,Alien Rage - Unlimited,train,75,561,509,0.6738,0.7792,1.5583
+231430,Company of Heroes 2,train,75,462,422,0.4113,0.6417,1.2833
+236870,HITMAN™,train,75,555,509,0.5405,0.7708,1.5417
+245760,TRANSFORMERS: Rise of the Dark Spark,train,75,977,890,0.1720,1.3569,2.7139
+289690,LARA CROFT AND THE TEMPLE OF OSIRIS™,train,75,545,500,0.5009,0.7569,1.5139
+320820,Toren,train,75,682,626,0.6891,0.9472,1.8944
+363680,Battlefleet Gothic: Armada (Classic),train,75,561,522,0.5900,0.7792,1.5583
+7520,Two Worlds II HD,test,75,459,426,0.5882,0.6375,1.2750
+34870,Sniper: Ghost Warrior 2,test,75,392,356,0.7321,0.5444,1.0889
+,TOTAL,"",975,7006,6451,,9.7306,19.4611

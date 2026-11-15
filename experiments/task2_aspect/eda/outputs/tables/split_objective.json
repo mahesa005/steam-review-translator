@@ -1,7 +1,14 @@
 {
-  "objective": 0.0178205593506415,
-  "js_divergence_bits": 0.004651511731593894,
-  "pos_share_gap": 0.005766666666666698,
-  "hit_rate_gap": 0.02057142857142852,
-  "combinations_checked": 120
+  "objective": 0.0414474717765493,
+  "train_vs_val": {
+    "js_divergence_bits": 0.014697675692053713,
+    "pos_share_gap": 0.0034888888888888747,
+    "hit_rate_gap": 0.01658888888888893
+  },
+  "train_vs_test": {
+    "js_divergence_bits": 0.010210907195606673,
+    "pos_share_gap": 0.0030388888888889243,
+    "hit_rate_gap": 0.009961111111111087
+  },
+  "partitions_checked": 4290
 }

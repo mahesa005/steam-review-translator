@@ -29,23 +29,28 @@ Anything that depends on the lexicon is **PRELIMINARY** (placeholder seed lexico
   entities (`html.unescape`) before labeling.
 - Labels are skewed: 82.0% of reviews are recommended (`score_distribution.csv`).
 
-### (b) Recommended games and 7/3 split — PRELIMINARY
+### (b) Recommended games and 9/2/2 train/val/test split — PRELIMINARY
+
+Owner decision (2026-11-16): 13 games split **by game** 9 / 2 / 2 (≈ 69 / 15 / 15), so val and
+test games are never seen in training. The 13 are the earlier 10 picks plus their 3 backups.
 
 | split | games |
 |---|---|
-| train (7) | Lara Croft and the Temple of Osiris (289690), Sniper: Ghost Warrior 2 (34870), Test Drive Unlimited 2 (9930), Might & Magic: Heroes VI (48220), Company of Heroes 2 (231430), Two Worlds II HD (7520), Paper Sorcerer (263560) |
-| test (3) | HITMAN (236870), Alien Rage - Unlimited (217920), Transformers: Rise of the Dark Spark (245760) |
-| backup | Battlefleet Gothic: Armada (363680), Toren (320820), Tony Hawk's Pro Skater HD (207210) |
+| train (9) | Lara Croft and the Temple of Osiris (289690), HITMAN (236870), Alien Rage - Unlimited (217920), Test Drive Unlimited 2 (9930), Company of Heroes 2 (231430), Transformers: Rise of the Dark Spark (245760), Battlefleet Gothic: Armada (363680), Toren (320820), Tony Hawk's Pro Skater HD (207210) |
+| val (2) | Might & Magic: Heroes VI (48220), Paper Sorcerer (263560) |
+| test (2) | Sniper: Ghost Warrior 2 (34870), Two Worlds II HD (7520) |
+| backup | Grey Goo (290790), Armikrog (334120), Call of Juarez: The Cartel (33420) |
 
 Source and one-line justifications: `../selected_games.csv`. Genres span action-adventure,
-shooters, stealth, racing, turn-based and real-time strategy, an action RPG and a dungeon
-crawler. All 10 have >= 7 of the 9 aspects at >= 5% of their lexicon hits
-(`selected_games_metrics.csv`). The split is close on every axis: JS divergence of the
-aspect profiles 0.0047 bits, recommend-share gap 0.006, hit-rate gap 0.021, best of 120
-partitions (`split_objective.json`, `split_comparison.csv`). Train and test do differ in median
-review length (223 vs 338 chars).
+shooters, stealth, racing, skateboarding, turn-based and real-time strategy, a puzzle
+platformer, an action RPG and a dungeon crawler. All 13 have >= 7 of the 9 aspects at >= 5%
+of their lexicon hits (`selected_games_metrics.csv`). Best of 4,290 partitions
+(`split_objective.json`, `split_comparison.csv`): train vs val JS divergence 0.0147 bits,
+recommend-share gap 0.003, hit-rate gap 0.017; train vs test 0.0102 bits, 0.003, 0.010.
+Known imbalance: **multiplayer** is rarer in val (0.056) and test (0.066) than in train
+(0.117), and test reviews are shorter (median 205 vs 295 chars in train).
 
-Check before committing to these: the picks lean **negative** (mean recommend share 0.57 vs
+Check before committing to these: the picks lean **negative** (mean recommend share 0.59 vs
 0.82 corpus-wide, `split_comparison.csv`, `score_distribution.csv`) because the score rewards
 some criticism; they lean towards **action/shooter**; Transformers has only 226 clean reviews.
 Swap in a backup if you want a more positive or less action-heavy set.
@@ -101,13 +106,13 @@ strongest) or map them to `other`.
 
 ### (f) Manual-verification workload
 
-Scope reduced to **50 reviews per game** (decision of the Task 2 owner, 2026-11-16):
-500 reviews → **3,609 sentences** (3,321 with >= 4 tokens): train 2,334 sentences from 7
-games, test 1,275 from 3 games. At 5–10 s per sentence to verify an LLM label that is
-**5–10 hours** (`candidate_sample_summary.csv`). The longest is Transformers: 575
-sentences. The 50-review sample is the first 50 of the same seeded per-game shuffle, so it
-is a strict subset of the earlier 150-review draw (10,145 sentences, 14–28 h) and can be
-grown later without relabeling.
+Owner decision (2026-11-16): an LLM pre-labels every sentence and the owner verifies, with
+**75 reviews per game** over the 13 games: 975 reviews → **7,006 sentences** (6,451 with >= 4
+tokens). By sentences the split is train 5,154 (74%) / val 1,001 (14%) / test 851 (12%);
+Transformers alone has 977 sentences. At 5–10 s per sentence to verify an LLM label that is
+**10–19 hours** (`candidate_sample_summary.csv`). For the original 10 games the 75 reviews
+are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earlier
+150-review draw, so the sample can grow later without relabeling.
 
 ### (g) Risks and open questions
 
@@ -701,67 +706,77 @@ _Source: `tables/topic_candidate_themes.csv`_
 
 ## 5. Game selection — PRELIMINARY (depends on the lexicon)
 
-Candidates: games with >= 200 clean English reviews. Score = weighted sum of z-scores (hit_rate×1.0, aspect_entropy×1.0, aspects_ge_5pct×0.5, informative_share×1.0, log_n_clean×0.25, negative_share_capped×0.5). Steam metadata fetched for the top 150; then greedy picks with at least 3 games having >= 25% negative reviews, at most 1 game per primary SteamSpy tag and 4 per Steam genre. Genres come from the Steam store / SteamSpy, not inferred from names. Split: all 7/3 partitions searched, minimizing JS divergence of mean aspect profiles + ½ gap in recommend share + ½ gap in hit rate, with >= 1 negative-heavy game in test.
+Candidates: games with >= 200 clean English reviews. Score = weighted sum of z-scores (hit_rate×1.0, aspect_entropy×1.0, aspects_ge_5pct×0.5, informative_share×1.0, log_n_clean×0.25, negative_share_capped×0.5). Steam metadata fetched for the top 150; then greedy picks with at least 3 games having >= 25% negative reviews, at most 1 game per primary SteamSpy tag and 4 per Steam genre. Genres come from the Steam store / SteamSpy, not inferred from names. Split by game: all 9/2/2 (train/val/test) partitions searched, minimizing, for val and for test against train, JS divergence of mean aspect profiles + ½ gap in recommend share + ½ gap in hit rate, with >= 1 negative-heavy game in both val and test.
 
 | game_id | name | split | justification |
 |---|---|---|---|
 | 289690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | Puzzle; 402 clean EN reviews, 57% negative; lexicon hit rate 41%, 8 aspects >=5% (top: gameplay 25%, multiplayer 19%, performance 16%) |
-| 34870 | Sniper: Ghost Warrior 2 | train | Sniper; 1,335 clean EN reviews, 37% negative; lexicon hit rate 40%, 8 aspects >=5% (top: story 18%, gameplay 15%, price 14%) |
-| 236870 | HITMAN™ | test | Stealth; 3,563 clean EN reviews, 38% negative; lexicon hit rate 36%, 8 aspects >=5% (top: gameplay 23%, price 18%, multiplayer 14%) |
-| 217920 | Alien Rage - Unlimited | test | Shooter; 452 clean EN reviews, 29% negative; lexicon hit rate 40%, 8 aspects >=5% (top: gameplay 21%, story 15%, performance 14%) |
+| 34870 | Sniper: Ghost Warrior 2 | test | Sniper; 1,335 clean EN reviews, 37% negative; lexicon hit rate 40%, 8 aspects >=5% (top: story 18%, gameplay 15%, price 14%) |
+| 236870 | HITMAN™ | train | Stealth; 3,563 clean EN reviews, 38% negative; lexicon hit rate 36%, 8 aspects >=5% (top: gameplay 23%, price 18%, multiplayer 14%) |
+| 217920 | Alien Rage - Unlimited | train | Shooter; 452 clean EN reviews, 29% negative; lexicon hit rate 40%, 8 aspects >=5% (top: gameplay 21%, story 15%, performance 14%) |
 | 9930 | Test Drive Unlimited 2 | train | Racing; 1,929 clean EN reviews, 46% negative; lexicon hit rate 30%, 9 aspects >=5% (top: price 24%, multiplayer 22%, story 10%) |
-| 48220 | Might & Magic: Heroes VI | train | Turn-Based Strategy; 1,950 clean EN reviews, 65% negative; lexicon hit rate 29%, 8 aspects >=5% (top: performance 19%, price 18%, story 12%) |
+| 48220 | Might & Magic: Heroes VI | val | Turn-Based Strategy; 1,950 clean EN reviews, 65% negative; lexicon hit rate 29%, 8 aspects >=5% (top: performance 19%, price 18%, story 12%) |
 | 231430 | Company of Heroes 2 | train | World War II; 9,845 clean EN reviews, 29% negative; lexicon hit rate 35%, 8 aspects >=5% (top: price 26%, gameplay 17%, multiplayer 14%) |
-| 7520 | Two Worlds II HD | train | Third Person; 1,517 clean EN reviews, 46% negative; lexicon hit rate 35%, 8 aspects >=5% (top: gameplay 25%, story 21%, price 18%) |
-| 245760 | TRANSFORMERS: Rise of the Dark Spark | test | Robots; 226 clean EN reviews, 62% negative; lexicon hit rate 38%, 7 aspects >=5% (top: story 32%, gameplay 14%, price 13%) |
-| 263560 | Paper Sorcerer | train | Dungeon Crawler; 366 clean EN reviews, 17% negative; lexicon hit rate 41%, 8 aspects >=5% (top: gameplay 29%, story 16%, audio 13%) |
-| 363680 | Battlefleet Gothic: Armada (Classic) | backup | Warhammer 40K; 1,879 clean EN reviews, 30% negative; lexicon hit rate 35%, 8 aspects >=5% (top: gameplay 26%, story 21%, multiplayer 10%) |
-| 320820 | Toren | backup | Puzzle-Platformer; 332 clean EN reviews, 35% negative; lexicon hit rate 46%, 7 aspects >=5% (top: story 28%, gameplay 26%, graphics 14%) |
-| 207210 | Tony Hawks Pro Skater HD | backup | Sports; 787 clean EN reviews, 41% negative; lexicon hit rate 29%, 8 aspects >=5% (top: price 22%, gameplay 19%, graphics 12%) |
+| 7520 | Two Worlds II HD | test | Third Person; 1,517 clean EN reviews, 46% negative; lexicon hit rate 35%, 8 aspects >=5% (top: gameplay 25%, story 21%, price 18%) |
+| 245760 | TRANSFORMERS: Rise of the Dark Spark | train | Robots; 226 clean EN reviews, 62% negative; lexicon hit rate 38%, 7 aspects >=5% (top: story 32%, gameplay 14%, price 13%) |
+| 263560 | Paper Sorcerer | val | Dungeon Crawler; 366 clean EN reviews, 17% negative; lexicon hit rate 41%, 8 aspects >=5% (top: gameplay 29%, story 16%, audio 13%) |
+| 363680 | Battlefleet Gothic: Armada (Classic) | train | Warhammer 40K; 1,879 clean EN reviews, 30% negative; lexicon hit rate 35%, 8 aspects >=5% (top: gameplay 26%, story 21%, multiplayer 10%) |
+| 320820 | Toren | train | Puzzle-Platformer; 332 clean EN reviews, 35% negative; lexicon hit rate 46%, 7 aspects >=5% (top: story 28%, gameplay 26%, graphics 14%) |
+| 207210 | Tony Hawks Pro Skater HD | train | Sports; 787 clean EN reviews, 41% negative; lexicon hit rate 29%, 8 aspects >=5% (top: price 22%, gameplay 19%, graphics 12%) |
+| 290790 | Grey Goo | backup | RTS; 1,676 clean EN reviews, 30% negative; lexicon hit rate 28%, 9 aspects >=5% (top: story 24%, gameplay 20%, price 13%) |
+| 334120 | Armikrog | backup | Point & Click; 462 clean EN reviews, 53% negative; lexicon hit rate 38%, 7 aspects >=5% (top: gameplay 25%, story 21%, audio 14%) |
+| 33420 | Call of Juarez: The Cartel | backup | FPS; 213 clean EN reviews, 65% negative; lexicon hit rate 34%, 8 aspects >=5% (top: story 28%, gameplay 15%, price 12%) |
 
 _Source: `selected_games.csv`_
 
 | app_id | name | split | primary_tag | n_clean | median_chars_clean | hit_rate | aspects_ge_5pct | aspect_entropy | informative_share | pos_share_clean | score |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 363,680 | Battlefleet Gothic: Armada (Classic) | backup | Warhammer 40K | 1,879 | 313 | 0.347 | 8 | 0.917 | 0.957 | 0.698 | 3.165 |
-| 320,820 | Toren | backup | Puzzle-Platformer | 332 | 472 | 0.456 | 7 | 0.830 | 0.991 | 0.648 | 3.146 |
-| 207,210 | Tony Hawks Pro Skater HD | backup | Sports | 787 | 242 | 0.293 | 8 | 0.939 | 0.980 | 0.595 | 3.112 |
-| 236,870 | HITMAN™ | test | Stealth | 3,563 | 353 | 0.362 | 8 | 0.926 | 0.970 | 0.619 | 4.028 |
-| 217,920 | Alien Rage - Unlimited | test | Shooter | 452 | 285.500 | 0.396 | 8 | 0.956 | 0.962 | 0.715 | 4.018 |
-| 245,760 | TRANSFORMERS: Rise of the Dark Spark | test | Robots | 226 | 375.500 | 0.383 | 7 | 0.894 | 0.966 | 0.376 | 3.193 |
+| 290,790 | Grey Goo | backup | RTS | 1,676 | 279.500 | 0.280 | 9 | 0.937 | 0.969 | 0.696 | 3.087 |
+| 334,120 | Armikrog | backup | Point & Click | 462 | 501 | 0.379 | 7 | 0.874 | 0.964 | 0.470 | 3.021 |
+| 33,420 | Call of Juarez: The Cartel | backup | FPS | 213 | 251 | 0.341 | 8 | 0.918 | 0.925 | 0.352 | 3.016 |
+| 34,870 | Sniper: Ghost Warrior 2 | test | Sniper | 1,335 | 170 | 0.399 | 8 | 0.962 | 0.939 | 0.634 | 4.448 |
+| 7,520 | Two Worlds II HD | test | Third Person | 1,517 | 240 | 0.354 | 8 | 0.891 | 0.948 | 0.544 | 3.321 |
 | 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | Puzzle | 402 | 264.500 | 0.411 | 8 | 0.911 | 0.983 | 0.428 | 4.552 |
-| 34,870 | Sniper: Ghost Warrior 2 | train | Sniper | 1,335 | 170 | 0.399 | 8 | 0.962 | 0.939 | 0.634 | 4.448 |
+| 236,870 | HITMAN™ | train | Stealth | 3,563 | 353 | 0.362 | 8 | 0.926 | 0.970 | 0.619 | 4.028 |
+| 217,920 | Alien Rage - Unlimited | train | Shooter | 452 | 285.500 | 0.396 | 8 | 0.956 | 0.962 | 0.715 | 4.018 |
 | 9,930 | Test Drive Unlimited 2 | train | Racing | 1,929 | 178 | 0.304 | 9 | 0.929 | 0.942 | 0.536 | 3.642 |
-| 48,220 | Might & Magic: Heroes VI | train | Turn-Based Strategy | 1,950 | 223 | 0.287 | 8 | 0.947 | 0.964 | 0.349 | 3.521 |
 | 231,430 | Company of Heroes 2 | train | World War II | 9,845 | 170 | 0.349 | 8 | 0.919 | 0.940 | 0.711 | 3.388 |
-| 7,520 | Two Worlds II HD | train | Third Person | 1,517 | 240 | 0.354 | 8 | 0.891 | 0.948 | 0.544 | 3.321 |
-| 263,560 | Paper Sorcerer | train | Dungeon Crawler | 366 | 318.500 | 0.413 | 8 | 0.886 | 0.992 | 0.828 | 3.173 |
+| 245,760 | TRANSFORMERS: Rise of the Dark Spark | train | Robots | 226 | 375.500 | 0.383 | 7 | 0.894 | 0.966 | 0.376 | 3.193 |
+| 363,680 | Battlefleet Gothic: Armada (Classic) | train | Warhammer 40K | 1,879 | 313 | 0.347 | 8 | 0.917 | 0.957 | 0.698 | 3.165 |
+| 320,820 | Toren | train | Puzzle-Platformer | 332 | 472 | 0.456 | 7 | 0.830 | 0.991 | 0.648 | 3.146 |
+| 207,210 | Tony Hawks Pro Skater HD | train | Sports | 787 | 242 | 0.293 | 8 | 0.939 | 0.980 | 0.595 | 3.112 |
+| 48,220 | Might & Magic: Heroes VI | val | Turn-Based Strategy | 1,950 | 223 | 0.287 | 8 | 0.947 | 0.964 | 0.349 | 3.521 |
+| 263,560 | Paper Sorcerer | val | Dungeon Crawler | 366 | 318.500 | 0.413 | 8 | 0.886 | 0.992 | 0.828 | 3.173 |
 
 _Source: `tables/selected_games_metrics.csv`_
 
-| metric | train | test |
-|---|---|---|
-| share_gameplay | 0.184 | 0.194 |
-| share_story | 0.145 | 0.183 |
-| share_graphics | 0.087 | 0.082 |
-| share_audio | 0.052 | 0.041 |
-| share_performance | 0.105 | 0.099 |
-| share_price | 0.169 | 0.134 |
-| share_multiplayer | 0.112 | 0.110 |
-| share_difficulty | 0.059 | 0.077 |
-| share_content | 0.087 | 0.080 |
-| hit_rate | 0.360 | 0.380 |
-| pos_share_clean | 0.576 | 0.570 |
-| aspect_entropy | 0.921 | 0.925 |
-| median_chars_clean | 223.429 | 338 |
+| metric | train | val | test |
+|---|---|---|---|
+| share_gameplay | 0.199 | 0.195 | 0.202 |
+| share_story | 0.162 | 0.142 | 0.197 |
+| share_graphics | 0.085 | 0.095 | 0.109 |
+| share_audio | 0.049 | 0.072 | 0.052 |
+| share_performance | 0.086 | 0.133 | 0.099 |
+| share_price | 0.155 | 0.142 | 0.159 |
+| share_multiplayer | 0.117 | 0.056 | 0.066 |
+| share_difficulty | 0.059 | 0.074 | 0.036 |
+| share_content | 0.088 | 0.091 | 0.079 |
+| hit_rate | 0.367 | 0.350 | 0.377 |
+| pos_share_clean | 0.592 | 0.588 | 0.589 |
+| aspect_entropy | 0.913 | 0.916 | 0.926 |
+| median_chars_clean | 294.833 | 270.750 | 205 |
+| games | 9.000 | 2.000 | 2.000 |
 
 _Source: `tables/split_comparison.csv`_
 
-Split objective (`tables/split_objective.json`): JS divergence 0.0047 bits, recommend-share gap 0.006, hit-rate gap 0.021, over 120 partitions.
+- train vs val: JS divergence 0.0147 bits, recommend-share gap 0.003, hit-rate gap 0.017
+- train vs test: JS divergence 0.0102 bits, recommend-share gap 0.003, hit-rate gap 0.010
 
-![Train vs test aspect profile](figures/split_comparison.png)
+Best of 4,290 partitions (`tables/split_objective.json`).
 
-_Train vs test aspect profile_
+![Train / val / test aspect profile](figures/split_comparison.png)
+
+_Train / val / test aspect profile_
 
 Top 20 scored candidates:
 
@@ -792,20 +807,23 @@ _Source: `tables/game_candidates_scored.csv` (first 20 of 2346 rows)_
 
 ## 6. Candidate labeling sample (not labeled, not committed)
 
-`data/processed/candidate_sample.csv` and `.jsonl`: 50 clean English reviews per selected game, uniform random from the game's full clean pool, seed 42, same splitter. Columns: game_id, game_name, split, review_id (raw CSV row number), sentence_id (`<review_id>-<k>`), sentence, recommended, n_words. Workload assumes [5, 10] seconds to verify one LLM label.
+`data/processed/candidate_sample.csv` and `.jsonl`: 75 clean English reviews per selected game, uniform random from the game's full clean pool, seed 42, same splitter. Columns: game_id, game_name, split, review_id (raw CSV row number), sentence_id (`<review_id>-<k>`), sentence, recommended, n_words. Workload assumes [5, 10] seconds to verify one LLM label.
 
 | game_id | game_name | split | reviews | sentences | informative_sentences | recommended_share | verify_hours_low | verify_hours_high |
 |---|---|---|---|---|---|---|---|---|
-| 7,520 | Two Worlds II HD | train | 50 | 316 | 291 | 0.668 | 0.439 | 0.878 |
-| 9,930 | Test Drive Unlimited 2 | train | 50 | 325 | 295 | 0.526 | 0.451 | 0.903 |
-| 34,870 | Sniper: Ghost Warrior 2 | train | 50 | 269 | 249 | 0.710 | 0.374 | 0.747 |
-| 48,220 | Might & Magic: Heroes VI | train | 50 | 289 | 266 | 0.384 | 0.401 | 0.803 |
-| 231,430 | Company of Heroes 2 | train | 50 | 330 | 297 | 0.379 | 0.458 | 0.917 |
-| 263,560 | Paper Sorcerer | train | 50 | 427 | 405 | 0.892 | 0.593 | 1.186 |
-| 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | 50 | 378 | 349 | 0.619 | 0.525 | 1.050 |
-| 217,920 | Alien Rage - Unlimited | test | 50 | 356 | 326 | 0.716 | 0.494 | 0.989 |
-| 236,870 | HITMAN™ | test | 50 | 344 | 313 | 0.584 | 0.478 | 0.956 |
-| 245,760 | TRANSFORMERS: Rise of the Dark Spark | test | 50 | 575 | 530 | 0.190 | 0.799 | 1.597 |
-|  | TOTAL |  | 500 | 3,609 | 3,321 |  | 5.013 | 10.025 |
+| 48,220 | Might & Magic: Heroes VI | val | 75 | 437 | 405 | 0.359 | 0.607 | 1.214 |
+| 263,560 | Paper Sorcerer | val | 75 | 564 | 538 | 0.825 | 0.783 | 1.567 |
+| 9,930 | Test Drive Unlimited 2 | train | 75 | 425 | 386 | 0.499 | 0.590 | 1.181 |
+| 207,210 | Tony Hawks Pro Skater HD | train | 75 | 386 | 362 | 0.474 | 0.536 | 1.072 |
+| 217,920 | Alien Rage - Unlimited | train | 75 | 561 | 509 | 0.674 | 0.779 | 1.558 |
+| 231,430 | Company of Heroes 2 | train | 75 | 462 | 422 | 0.411 | 0.642 | 1.283 |
+| 236,870 | HITMAN™ | train | 75 | 555 | 509 | 0.540 | 0.771 | 1.542 |
+| 245,760 | TRANSFORMERS: Rise of the Dark Spark | train | 75 | 977 | 890 | 0.172 | 1.357 | 2.714 |
+| 289,690 | LARA CROFT AND THE TEMPLE OF OSIRIS™ | train | 75 | 545 | 500 | 0.501 | 0.757 | 1.514 |
+| 320,820 | Toren | train | 75 | 682 | 626 | 0.689 | 0.947 | 1.894 |
+| 363,680 | Battlefleet Gothic: Armada (Classic) | train | 75 | 561 | 522 | 0.590 | 0.779 | 1.558 |
+| 7,520 | Two Worlds II HD | test | 75 | 459 | 426 | 0.588 | 0.637 | 1.275 |
+| 34,870 | Sniper: Ghost Warrior 2 | test | 75 | 392 | 356 | 0.732 | 0.544 | 1.089 |
+|  | TOTAL |  | 975 | 7,006 | 6,451 |  | 9.731 | 19.461 |
 
 _Source: `tables/candidate_sample_summary.csv`_

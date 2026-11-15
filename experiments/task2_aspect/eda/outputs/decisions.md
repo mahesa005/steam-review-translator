@@ -19,23 +19,28 @@ Anything that depends on the lexicon is **PRELIMINARY** (placeholder seed lexico
   entities (`html.unescape`) before labeling.
 - Labels are skewed: 82.0% of reviews are recommended (`score_distribution.csv`).
 
-### (b) Recommended games and 7/3 split — PRELIMINARY
+### (b) Recommended games and 9/2/2 train/val/test split — PRELIMINARY
+
+Owner decision (2026-11-16): 13 games split **by game** 9 / 2 / 2 (≈ 69 / 15 / 15), so val and
+test games are never seen in training. The 13 are the earlier 10 picks plus their 3 backups.
 
 | split | games |
 |---|---|
-| train (7) | Lara Croft and the Temple of Osiris (289690), Sniper: Ghost Warrior 2 (34870), Test Drive Unlimited 2 (9930), Might & Magic: Heroes VI (48220), Company of Heroes 2 (231430), Two Worlds II HD (7520), Paper Sorcerer (263560) |
-| test (3) | HITMAN (236870), Alien Rage - Unlimited (217920), Transformers: Rise of the Dark Spark (245760) |
-| backup | Battlefleet Gothic: Armada (363680), Toren (320820), Tony Hawk's Pro Skater HD (207210) |
+| train (9) | Lara Croft and the Temple of Osiris (289690), HITMAN (236870), Alien Rage - Unlimited (217920), Test Drive Unlimited 2 (9930), Company of Heroes 2 (231430), Transformers: Rise of the Dark Spark (245760), Battlefleet Gothic: Armada (363680), Toren (320820), Tony Hawk's Pro Skater HD (207210) |
+| val (2) | Might & Magic: Heroes VI (48220), Paper Sorcerer (263560) |
+| test (2) | Sniper: Ghost Warrior 2 (34870), Two Worlds II HD (7520) |
+| backup | Grey Goo (290790), Armikrog (334120), Call of Juarez: The Cartel (33420) |
 
 Source and one-line justifications: `../selected_games.csv`. Genres span action-adventure,
-shooters, stealth, racing, turn-based and real-time strategy, an action RPG and a dungeon
-crawler. All 10 have >= 7 of the 9 aspects at >= 5% of their lexicon hits
-(`selected_games_metrics.csv`). The split is close on every axis: JS divergence of the
-aspect profiles 0.0047 bits, recommend-share gap 0.006, hit-rate gap 0.021, best of 120
-partitions (`split_objective.json`, `split_comparison.csv`). Train and test do differ in median
-review length (223 vs 338 chars).
+shooters, stealth, racing, skateboarding, turn-based and real-time strategy, a puzzle
+platformer, an action RPG and a dungeon crawler. All 13 have >= 7 of the 9 aspects at >= 5%
+of their lexicon hits (`selected_games_metrics.csv`). Best of 4,290 partitions
+(`split_objective.json`, `split_comparison.csv`): train vs val JS divergence 0.0147 bits,
+recommend-share gap 0.003, hit-rate gap 0.017; train vs test 0.0102 bits, 0.003, 0.010.
+Known imbalance: **multiplayer** is rarer in val (0.056) and test (0.066) than in train
+(0.117), and test reviews are shorter (median 205 vs 295 chars in train).
 
-Check before committing to these: the picks lean **negative** (mean recommend share 0.57 vs
+Check before committing to these: the picks lean **negative** (mean recommend share 0.59 vs
 0.82 corpus-wide, `split_comparison.csv`, `score_distribution.csv`) because the score rewards
 some criticism; they lean towards **action/shooter**; Transformers has only 226 clean reviews.
 Swap in a backup if you want a more positive or less action-heavy set.
@@ -91,13 +96,13 @@ strongest) or map them to `other`.
 
 ### (f) Manual-verification workload
 
-Scope reduced to **50 reviews per game** (decision of the Task 2 owner, 2026-11-16):
-500 reviews → **3,609 sentences** (3,321 with >= 4 tokens): train 2,334 sentences from 7
-games, test 1,275 from 3 games. At 5–10 s per sentence to verify an LLM label that is
-**5–10 hours** (`candidate_sample_summary.csv`). The longest is Transformers: 575
-sentences. The 50-review sample is the first 50 of the same seeded per-game shuffle, so it
-is a strict subset of the earlier 150-review draw (10,145 sentences, 14–28 h) and can be
-grown later without relabeling.
+Owner decision (2026-11-16): an LLM pre-labels every sentence and the owner verifies, with
+**75 reviews per game** over the 13 games: 975 reviews → **7,006 sentences** (6,451 with >= 4
+tokens). By sentences the split is train 5,154 (74%) / val 1,001 (14%) / test 851 (12%);
+Transformers alone has 977 sentences. At 5–10 s per sentence to verify an LLM label that is
+**10–19 hours** (`candidate_sample_summary.csv`). For the original 10 games the 75 reviews
+are the first 75 of the same seeded per-game shuffle, i.e. a subset of the earlier
+150-review draw, so the sample can grow later without relabeling.
 
 ### (g) Risks and open questions
 
