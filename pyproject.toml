@@ -76,6 +76,19 @@ check_untyped_defs = true
 disallow_untyped_defs = true
 no_implicit_optional = true
 
+# Library berat per task (torch, transformers, ...) ada di extra .[task1]/.[task2]/.[task3],
+# sedangkan CI hanya memasang .[dev]. Abaikan saja stub yang tidak ada.
+[[tool.mypy.overrides]]
+module = [
+    "torch.*",
+    "transformers.*",
+    "datasets.*",
+    "rouge_score.*",
+    "bertopic.*",
+    "sentence_transformers.*",
+]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
