@@ -21,14 +21,17 @@ package. Record the script that produced each file.
 
 | Dataset | Used by | Source | License / terms | Local path |
 |---|---|---|---|---|
-| Steam reviews dump (`steam.csv.bz2`) | Task 1, Task 2 | _TODO: URL (e.g. Kaggle Steam reviews)_ | _TODO: check dataset page_ | `raw/steam.csv.bz2` |
+| Steam Review Dataset 2017 (`steam.csv.bz2`, 6.4M English reviews, no header: `app_id, review_text, review_score (1/-1), review_votes`) | Task 1, Task 2 | [Zenodo 1000885](https://zenodo.org/records/1000885) | CC BY-NC 4.0 | `raw/steam/steam.csv.bz2` |
+| Metacritic's Best Games and Reviews 2025 (`games.csv`, `games_reviews.csv`: 1.13M user + 0.52M critic reviews) | Task 1 | [Kaggle davutb/metacritic-games](https://www.kaggle.com/datasets/davutb/metacritic-games) | _check Kaggle page_ (scraped from Metacritic) | `raw/metacritic/metacritic-games.zip` |
 | Labelled aspect sentences (if any) | Task 2 | _TODO_ | _TODO_ | `raw/aspect/` |
 | GameWikiSum | Task 3 | _TODO: URL from the paper_ | **Academic / research use only.** Do not redistribute. | `raw/gamewikisum/` |
 
 ## How to download
 
 ```bash
-# TODO: replace with the real commands, e.g.
+make task1-download     # Metacritic zip + Steam bz2 (no Kaggle login needed)
+make task1-data         # -> data/processed/task1/ (see configs/task1/data.yaml)
+# TODO (other tasks): replace with the real commands, e.g.
 # kaggle datasets download -d <owner>/<dataset> -p data/raw
 # curl -L -o data/raw/gamewikisum.zip <URL>
 ```

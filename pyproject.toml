@@ -59,6 +59,7 @@ where = ["src"]
 line-length = 100
 target-version = "py311"
 src = ["src", "tests"]
+extend-exclude = ["*.ipynb"]  # Colab notebooks: shell magics, not package code
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
@@ -74,6 +75,12 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 check_untyped_defs = true
 disallow_untyped_defs = true
+
+# Heavy optional deps (task extras) are imported lazily and not installed in CI.
+[[tool.mypy.overrides]]
+module = ["torch.*", "transformers.*", "vaderSentiment.*", "sklearn.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
 no_implicit_optional = true
 
 [tool.pytest.ini_options]
