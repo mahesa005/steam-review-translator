@@ -37,7 +37,10 @@ ASPECT_REGISTRY: dict[str, str] = {
 }
 SUMMARIZATION_REGISTRY: dict[str, str] = {
     "mock": "steam_review_translator.summarization.mock:MockMetaReviewGenerator",
-    # "bart": "steam_review_translator.summarization.bart:BartMetaReviewGenerator",  # Lukas
+    # Lukas: baseline ekstraktif (B1) dan generator seq2seq (B2/E1/E2/E3).
+    "extractive": "steam_review_translator.summarization.extractive:ExtractiveMetaReviewGenerator",
+    "bart": "steam_review_translator.summarization.transformer:BartMetaReviewGenerator",
+    "t5": "steam_review_translator.summarization.transformer:T5MetaReviewGenerator",
 }
 
 
