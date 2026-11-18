@@ -7,6 +7,7 @@ every input and validates every output with labelkit.
 Usage (from the repo root):
     python experiments/task2_aspect/labeling/run_agents.py prepare
     python experiments/task2_aspect/labeling/run_agents.py step <batch_id>   # after each agent
+    python experiments/task2_aspect/labeling/run_agents.py advance   # step all, list ready tasks
     python experiments/task2_aspect/labeling/run_agents.py status
     python experiments/task2_aspect/labeling/run_agents.py merge
 
@@ -289,6 +290,36 @@ def step(run: Run, batch_id: str) -> None:
     print(f"{batch_id}: done; {len(flagged)} flagged, {changed} changed")
 
 
+def advance(run: Run) -> None:
+    """Step every batch that has new outputs, then list the agent tasks that are ready."""
+    ready = []
+    for b in run.batches():
+        stage = stage_of(run, b)
+        d = run.dir(b.batch_id)
+        if stage == "label":
+            ready.append(d / "TASK_label.md")
+            continue
+        if stage == "done":
+            continue
+        try:
+            step(run, b.batch_id)
+        except ValueError as e:  # pydantic errors are ValueErrors: report, do not stop
+            print(f"{b.batch_id}: INVALID OUTPUT: {str(e).splitlines()[0]}")
+            continue
+        stage = stage_of(run, b)
+        if stage == "review":
+            ready += [
+                d / f"TASK_review_{n}.md"
+                for n in run.reviewers
+                if not (d / f"review_{n}.json").exists()
+            ]
+        elif stage == "finalize":
+            ready.append(d / "TASK_finalize.md")
+    print("READY:")
+    for path in ready:
+        print(path.relative_to(run.root).as_posix())
+
+
 def status(run: Run) -> None:
     counts: dict[str, int] = {}
     rows = []
@@ -356,8 +387,8 @@ def main() -> int:
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "step" and len(sys.argv) == 3:
         step(run, sys.argv[2])
-    elif cmd in {"prepare", "status", "merge"}:
-        {"prepare": prepare, "status": status, "merge": merge}[cmd](run)
+    elif cmd in {"prepare", "advance", "status", "merge"}:
+        {"prepare": prepare, "advance": advance, "status": status, "merge": merge}[cmd](run)
     else:
         print(__doc__)
         return 2
