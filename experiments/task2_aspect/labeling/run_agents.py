@@ -9,7 +9,7 @@ Usage (from the repo root):
     python experiments/task2_aspect/labeling/run_agents.py step <batch_id>   # after each agent
     python experiments/task2_aspect/labeling/run_agents.py advance   # step all, list ready tasks
     python experiments/task2_aspect/labeling/run_agents.py status
-    python experiments/task2_aspect/labeling/run_agents.py merge
+    python experiments/task2_aspect/labeling/run_agents.py merge [--partial]  # partial: checkpoint
 
 Files per batch in <run_dir>/<batch_id>/:
     label_input.md -> labels.json -> review_input.md -> review_<reviewer>.json
@@ -382,11 +382,17 @@ def status(run: Run) -> None:
     print(counts)
 
 
-def merge(run: Run) -> None:
+def merge(run: Run, partial: bool = False) -> None:
+    """Write the final labels and the verification queue.
+
+    ``partial`` writes a checkpoint of the finished batches only, without the queue.
+    """
     batches = run.batches()
     pending = [b.batch_id for b in batches if stage_of(run, b) != "done"]
-    if pending:
+    if pending and not partial:
         raise SystemExit(f"{len(pending)} batches not done, e.g. {pending[:5]}")
+    if partial:
+        batches = [b for b in batches if b.batch_id not in set(pending)]
     meta = {s.sentence_id: (b, r, s) for b in batches for r in b.reviews for s in r.sentences}
     records = []
     for b in batches:
@@ -405,6 +411,9 @@ def merge(run: Run) -> None:
             )
     out = project_root() / run.cfg["output"]["final_labels"]
     _write(out, "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records))
+    if partial:
+        print(f"checkpoint: {len(batches)} batches, {len(records)} sentences -> {out}")
+        return
 
     # verification queue: every flagged sentence + a random share of unflagged, per split
     rng = random.Random(run.cfg["seed"])
@@ -438,6 +447,8 @@ def main() -> int:
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "step" and len(sys.argv) == 3:
         step(run, sys.argv[2])
+    elif cmd == "merge" and sys.argv[2:] == ["--partial"]:
+        merge(run, partial=True)
     elif cmd in {"prepare", "advance", "status", "merge"}:
         {"prepare": prepare, "advance": advance, "status": status, "merge": merge}[cmd](run)
     else:
