@@ -14,9 +14,9 @@ Each sentence gets a list of zero or more `(aspect, polarity)` pairs.
 | `story` | plot, characters, dialogue and writing, lore, setting as narrative, ending, campaign as a story |
 | `graphics` | visuals, art style, animation, textures, lighting, how anything looks |
 | `audio` | music, soundtrack, sound effects, voice acting, how anything sounds |
-| `performance` | frame rate, lag, stutter, loading, crashes, bugs, glitches, optimization, technical stability |
+| `performance` | frame rate, lag, stutter, loading, crashes, bugs, glitches, optimization, technical stability, always-online requirements and server disconnects in single-player |
 | `price` | cost, value for money, sales, discounts, refunds, DLC pricing, microtransactions |
-| `multiplayer` | online play, co-op, PvP, servers, matchmaking, finding players |
+| `multiplayer` | online play with other people, co-op, PvP, multiplayer servers, matchmaking, finding players |
 | `difficulty` | how hard or easy the game is, challenge, learning curve, punishing design |
 | `content` | amount and length of content, replayability, variety, what there is to do, endgame |
 | `overall` | a verdict on the whole game rather than one aspect: ratings ("8/10"), (not) recommending, "great game", "don't buy", "worth it" without money |
@@ -56,6 +56,9 @@ An empty list `[]` means the sentence mentions no aspect and gives no overall ve
     itself is `other`.
 11. **Do not guess.** If the sentence does not say it, do not label it. The review's thumbs up or
     down is context, not a label for every sentence.
+12. **Always-online is `performance`, not `multiplayer`.** Being forced online to play or
+    progress alone, and losing progress when the connection or server drops, is
+    `performance`. `multiplayer` is only for playing with or against other people.
 
 ## Examples
 

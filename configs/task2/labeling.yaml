@@ -15,7 +15,7 @@ stages:
     model: claude-opus-5-5
     effort: medium
     max_tokens: 32000
-  review:                  # stage 2, run once per reviewer
+  review:                  # stage 2, run once per reviewer (API path)
     model: claude-sonnet-5-5
     effort: low
     max_tokens: 16000
@@ -25,6 +25,15 @@ stages:
     effort: medium
     max_tokens: 32000
     min_flags: 1
+
+# Claude Code agent path (run_agents.py), chosen after the reviewer pilot (2026-11-18):
+# Sonnet caught Opus's clear errors, a second Opus caught a subtle one; Haiku caught neither.
+agents:
+  max_sentences: 130       # per batch; the 129-sentence pilot batch worked cleanly
+  label: opus
+  reviewers: [sonnet, opus]   # independent, different models -> different blind spots
+  finalize: opus
+  run_dir: data/interim/task2_labeling/agents
 
 pilot:
   n_batches: 2             # first run: this many batches, train games only

@@ -1,8 +1,8 @@
 # Task: decide the final labels for flagged sentences
 
-You labeled these sentences earlier. Three independent reviewers checked your labels; each of the
-sentences below was flagged by at least one of them. You will receive the full reviews, your
-original labels, and every reviewer's verdict, reason and suggested labels.
+You labeled these sentences earlier. Two independent reviewers (different models) checked your
+labels; each of the sentences below was flagged by at least one of them. You will receive the
+full reviews, your original labels, and every reviewer's verdict, reason and suggested labels.
 
 For each sentence id, decide the final labels following the guideline above:
 - Weigh the reviewers' reasons on their merits, not by how many reviewers agree. One reviewer
