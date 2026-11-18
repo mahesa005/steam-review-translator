@@ -104,9 +104,18 @@ class Run:
         check_ids([s.sentence_id for s in out.sentences], b.sentence_ids)
         return {s.sentence_id: dedupe_labels(s.labels)[0] for s in out.sentences}
 
+    def reviewers_of(self, b: Batch) -> list[str]:
+        """Configured reviewers plus any other reviewer whose output already exists."""
+        extra = sorted(
+            p.stem.removeprefix("review_")
+            for p in self.dir(b.batch_id).glob("review_*.json")
+            if p.stem.removeprefix("review_") not in self.reviewers
+        )
+        return [*self.reviewers, *extra]
+
     def reviews(self, b: Batch) -> dict[str, dict[str, ReviewItem]]:
         res = {}
-        for name in self.reviewers:
+        for name in self.reviewers_of(b):
             out = ReviewOutput.model_validate_json(
                 _read(self.dir(b.batch_id) / f"review_{name}.json")
             )
@@ -118,7 +127,7 @@ class Run:
         return [
             sid
             for sid in b.sentence_ids
-            if any(reviews[n][sid].verdict.value == "flag" for n in self.reviewers)
+            if any(r[sid].verdict.value == "flag" for r in reviews.values())
         ]
 
 
@@ -171,6 +180,42 @@ sentiment on Steam reviews). {common}
 4. Reply with only one line: "done: <number of decisions>, <number changed> changed".
 """,
 }
+
+
+_GROUP_FINALIZE = """You are the lead annotator for a university NLP project (aspect-based
+sentiment on Steam reviews). {common}
+Read fully, once: {prompts}/guideline.md (follow it exactly), {prompts}/finalize.md (your
+task) and {run}/finalize_schema.json (the output format).
+
+Then, for EACH batch folder below, independently:
+1. Read <folder>/finalize_input.md (full reviews; flagged sentences with labels and reviewer
+   verdicts) and <folder>/flagged_ids.json (the ids to decide).
+2. Decide the final labels for every id in that folder's flagged_ids.json.
+3. Write <folder>/finalize.json with the Write tool, valid against finalize_schema.json:
+   {{"decisions": [{{"sentence_id": "...", "final_labels": [...], "decision": "kept"|"changed",
+   "rationale": "..."}}]}}  Exactly one decision per flagged id of that folder.
+You may write only these finalize.json files.
+
+Batch folders:
+{folders}
+
+Reply with only one line: "done: <folders written>, <decisions>, <changed> changed".
+"""
+
+
+def write_group_finalize(run: Run, batch_ids: list[str]) -> Path:
+    """One agent task that finalizes several batches (pays the agent overhead once)."""
+    root = project_root()
+    rel = run.root.relative_to(root).as_posix()
+    text = _GROUP_FINALIZE.format(
+        common=_COMMON.format(root=root.as_posix()),
+        prompts=run.cfg["prompts_dir"],
+        run=rel,
+        folders="\n".join(f"- {rel}/{b}" for b in batch_ids),
+    )
+    path = run.root / f"TASK_finalize_group_{batch_ids[0]}.md"
+    _write(path, text)
+    return path
 
 
 def write_task(run: Run, batch_id: str, stage: str, reviewer: str = "") -> Path:
@@ -257,7 +302,7 @@ def step(run: Run, batch_id: str) -> None:
     decisions: dict = {}
     if flagged:
         if not (d / "finalize.json").exists():
-            per_sentence = {sid: [reviews[n][sid] for n in run.reviewers] for sid in flagged}
+            per_sentence = {sid: [r[sid] for r in reviews.values()] for sid in flagged}
             _write(
                 d / "finalize_input.md",
                 render_batch(b, labels=labels, reviews=per_sentence, only_ids=set(flagged)),
@@ -275,7 +320,7 @@ def step(run: Run, batch_id: str) -> None:
             "sentence_id": sid,
             "labels": _dump(labels[sid]),
             "initial_labels": _dump(labels[sid]),
-            "flagged_by": [n for n in run.reviewers if reviews[n][sid].verdict.value == "flag"],
+            "flagged_by": [n for n, r in reviews.items() if r[sid].verdict.value == "flag"],
             "decision": None,
             "rationale": "",
         }
@@ -291,8 +336,12 @@ def step(run: Run, batch_id: str) -> None:
 
 
 def advance(run: Run) -> None:
-    """Step every batch that has new outputs, then list the agent tasks that are ready."""
-    ready = []
+    """Step every batch that has new outputs, then list the agent tasks that are ready.
+
+    Batches waiting for stage 3 are grouped into one finalize task.
+    """
+    ready: list[Path] = []
+    to_finalize: list[str] = []
     for b in run.batches():
         stage = stage_of(run, b)
         d = run.dir(b.batch_id)
@@ -314,7 +363,9 @@ def advance(run: Run) -> None:
                 if not (d / f"review_{n}.json").exists()
             ]
         elif stage == "finalize":
-            ready.append(d / "TASK_finalize.md")
+            to_finalize.append(b.batch_id)
+    if to_finalize:
+        ready.append(write_group_finalize(run, to_finalize))
     print("READY:")
     for path in ready:
         print(path.relative_to(run.root).as_posix())

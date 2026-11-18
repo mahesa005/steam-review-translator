@@ -31,7 +31,10 @@ stages:
 agents:
   max_sentences: 130       # per batch; the 129-sentence pilot batch worked cleanly
   label: opus
-  reviewers: [sonnet, opus]   # independent, different models -> different blind spots
+  # 2026-11-18, after 14 batches (1,494 sentences): reviews changed 0.4% of labels and the Opus
+  # reviewer added 2 unique flags, at ~2/3 of the tokens. Batches done before keep their Opus
+  # review; later batches use Sonnet only, and stage 3 runs grouped over many batches.
+  reviewers: [sonnet]
   finalize: opus
   run_dir: data/interim/task2_labeling/agents
 
