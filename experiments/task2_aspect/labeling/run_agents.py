@@ -121,6 +121,74 @@ class Run:
         ]
 
 
+_COMMON = """Do exactly this task and nothing else. Do not modify any file except the one output
+file named below. Do not run git. Paths are relative to the repo root:
+{root}
+
+aspect values: gameplay, story, graphics, audio, performance, price, multiplayer, difficulty,
+content, overall, other. polarity values: positive, negative, neutral.
+Write JSON only in the output file: no comments, no markdown fences.
+"""
+
+_TASKS = {
+    "label": """You are an annotator for a university NLP project (aspect-based sentiment on Steam
+reviews). {common}
+1. Read fully: {prompts}/guideline.md (follow it exactly), {prompts}/label.md (your task),
+   {d}/label_input.md (reviews and sentences, ids like [1850475-3]) and
+   {run}/label_schema.json (the output format).
+2. Label every sentence id in label_input.md. Read each full review first.
+3. Write {d}/labels.json with the Write tool, valid against label_schema.json:
+   {{"sentences": [{{"sentence_id": "...", "labels": [{{"aspect": "...", "polarity": "..."}}]}}]}}
+   Exactly one entry per sentence id, in input order, none missing or added; "labels": [] when
+   the sentence has no aspect and no overall verdict; at most one label per aspect.
+4. Reply with only one line: "done: <number of entries>".
+""",
+    "review": """You are a reviewer for a university NLP project (aspect-based sentiment on Steam
+reviews). {common}
+1. Read fully: {prompts}/guideline.md (judge labels against it exactly), {prompts}/review.md
+   (your task), {d}/review_input.md (reviews, sentences and the labels another annotator gave)
+   and {run}/review_schema.json (the output format).
+2. Review every sentence's labels. Read each full review first.
+3. Write {d}/review_{reviewer}.json with the Write tool, valid against review_schema.json:
+   {{"items": [{{"sentence_id": "...", "verdict": "ok"|"flag", "issue": "...", "reasoning": "...",
+   "suggested_labels": [...]}}], "batch_verdict": "pass"|"needs_revision", "notes": "..."}}
+   Exactly one item per sentence id, in input order, none missing or added. "ok" items use
+   "issue": "none", "reasoning": "", "suggested_labels": []. "flag" items use one issue of
+   wrong_aspect, missing_aspect, extra_aspect, wrong_polarity, guideline, a short reason and the
+   full corrected label list.
+4. Reply with only one line: "done: <number of items>, <number flagged> flagged".
+""",
+    "finalize": """You are the lead annotator for a university NLP project (aspect-based
+sentiment on Steam reviews). {common}
+1. Read fully: {prompts}/guideline.md (follow it exactly), {prompts}/finalize.md (your task),
+   {d}/finalize_input.md (full reviews; flagged sentences with labels and reviewer verdicts),
+   {d}/flagged_ids.json (the ids to decide) and {run}/finalize_schema.json (the output format).
+2. Decide the final labels for every id in flagged_ids.json.
+3. Write {d}/finalize.json with the Write tool, valid against finalize_schema.json:
+   {{"decisions": [{{"sentence_id": "...", "final_labels": [...], "decision": "kept"|"changed",
+   "rationale": "..."}}]}}  Exactly one decision per flagged id, none missing or added.
+4. Reply with only one line: "done: <number of decisions>, <number changed> changed".
+""",
+}
+
+
+def write_task(run: Run, batch_id: str, stage: str, reviewer: str = "") -> Path:
+    """Write the agent instructions for one stage; the agent prompt just points at this file."""
+    root = project_root()
+    rel = run.root.relative_to(root).as_posix()
+    text = _TASKS[stage].format(
+        common=_COMMON.format(root=root.as_posix()),
+        prompts=run.cfg["prompts_dir"],
+        run=rel,
+        d=f"{rel}/{batch_id}",
+        reviewer=reviewer,
+    )
+    name = f"TASK_{stage}{'_' + reviewer if reviewer else ''}.md"
+    path = run.dir(batch_id) / name
+    _write(path, text)
+    return path
+
+
 def prepare(run: Run) -> None:
     run.root.mkdir(parents=True, exist_ok=True)
     batches = run.batches()
@@ -146,6 +214,7 @@ def prepare(run: Run) -> None:
         d = run.dir(b.batch_id)
         d.mkdir(exist_ok=True)
         _write(d / "label_input.md", render_batch(b))
+        write_task(run, b.batch_id, "label")
     n = sum(b.n_sentences for b in batches)
     print(f"{len(batches)} batches, {n} sentences -> {run.root}")
 
@@ -173,6 +242,8 @@ def step(run: Run, batch_id: str) -> None:
     labels = run.labels(b)
     if not (d / "review_input.md").exists():
         _write(d / "review_input.md", render_batch(b, labels=labels))
+        for name in run.reviewers:
+            write_task(run, batch_id, "review", name)
     if stage == "review":
         missing = [n for n in run.reviewers if not (d / f"review_{n}.json").exists()]
         print(f"{batch_id}: labels ok ({len(labels)}); needs review from {', '.join(missing)}")
@@ -191,6 +262,7 @@ def step(run: Run, batch_id: str) -> None:
                 render_batch(b, labels=labels, reviews=per_sentence, only_ids=set(flagged)),
             )
             _write(d / "flagged_ids.json", json.dumps(flagged))
+            write_task(run, batch_id, "finalize")
             print(f"{batch_id}: reviews ok; {len(flagged)} flagged, needs finalize.json")
             return
         out = FinalizeOutput.model_validate_json(_read(d / "finalize.json"))
