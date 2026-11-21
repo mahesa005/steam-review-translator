@@ -203,6 +203,43 @@ Reply with only one line: "done: <folders written>, <decisions>, <changed> chang
 """
 
 
+_GROUP_LABEL = """You are an annotator for a university NLP project (aspect-based sentiment on
+Steam reviews). {common}
+Read fully, once: {prompts}/guideline.md (follow it exactly), {prompts}/label.md (your task)
+and {run}/label_schema.json (the output format).
+
+Then, for EACH batch folder below, independently:
+1. Read <folder>/label_input.md (reviews and sentences, ids like [1850475-3]).
+2. Label every sentence id in it. Read each full review first.
+3. Write <folder>/labels.json with the Write tool, valid against label_schema.json:
+   {{"sentences": [{{"sentence_id": "...", "labels": [{{"aspect": "...", "polarity": "..."}}]}}]}}
+   Exactly one entry per sentence id of that folder, in input order, none missing or added;
+   "labels": [] when the sentence has no aspect and no overall verdict; at most one label per
+   aspect. Judge every sentence yourself; do not generate the file with a script.
+You may write only these labels.json files.
+
+Batch folders:
+{folders}
+
+Reply with only one line: "done: <folders written>, <total entries>".
+"""
+
+
+def write_group_label(run: Run, batch_ids: list[str]) -> Path:
+    """One agent task that labels several batches (pays the agent overhead once)."""
+    root = project_root()
+    rel = run.root.relative_to(root).as_posix()
+    text = _GROUP_LABEL.format(
+        common=_COMMON.format(root=root.as_posix()),
+        prompts=run.cfg["prompts_dir"],
+        run=rel,
+        folders="\n".join(f"- {rel}/{b}" for b in batch_ids),
+    )
+    path = run.root / f"TASK_label_group_{batch_ids[0]}.md"
+    _write(path, text)
+    return path
+
+
 def write_group_finalize(run: Run, batch_ids: list[str]) -> Path:
     """One agent task that finalizes several batches (pays the agent overhead once)."""
     root = project_root()
@@ -338,15 +375,17 @@ def step(run: Run, batch_id: str) -> None:
 def advance(run: Run) -> None:
     """Step every batch that has new outputs, then list the agent tasks that are ready.
 
-    Batches waiting for stage 3 are grouped into one finalize task.
+    Unlabeled batches are grouped ``agents.label_group`` per label task; batches waiting for
+    stage 3 are grouped into one finalize task.
     """
     ready: list[Path] = []
+    to_label: list[str] = []
     to_finalize: list[str] = []
     for b in run.batches():
         stage = stage_of(run, b)
         d = run.dir(b.batch_id)
         if stage == "label":
-            ready.append(d / "TASK_label.md")
+            to_label.append(b.batch_id)
             continue
         if stage == "done":
             continue
@@ -364,6 +403,13 @@ def advance(run: Run) -> None:
             ]
         elif stage == "finalize":
             to_finalize.append(b.batch_id)
+    size = run.cfg["agents"].get("label_group", 1)
+    for k in range(0, len(to_label), size):
+        group = to_label[k : k + size]
+        if len(group) == 1:
+            ready.append(run.dir(group[0]) / "TASK_label.md")
+        else:
+            ready.append(write_group_label(run, group))
     if to_finalize:
         ready.append(write_group_finalize(run, to_finalize))
     print("READY:")

@@ -34,9 +34,22 @@ agents:
   # 2026-11-18, after 14 batches (1,494 sentences): reviews changed 0.4% of labels and the Opus
   # reviewer added 2 unique flags, at ~2/3 of the tokens. Batches done before keep their Opus
   # review; later batches use Sonnet only, and stage 3 runs grouped over many batches.
-  reviewers: [sonnet]
+  # 2026-11-21, deadline next day: review dropped for the rest (it changed 10 of 2,422 labels).
+  # Existing review files are still used; labeled batches without one go straight to final.
+  reviewers: []
+  label_group: 3           # batches per label agent (pays the ~45k agent overhead once)
   finalize: opus
   run_dir: data/interim/task2_labeling/agents
+
+# Local model path (local_label.py), 2026-11-21: label with Ollama on the laptop GPU instead of
+# Claude agents, after calibrating against the sentences Opus already labeled.
+local:
+  model: qwen2.5:7b
+  host: http://localhost:11434
+  num_ctx: 8192            # guideline (~2k tokens) + one review + output
+  samples: 4               # answers per review, combined by vote (1 = one greedy answer)
+  temperature: 0.7         # used when samples > 1
+  out_dir: data/interim/task2_labeling/local
 
 pilot:
   n_batches: 2             # first run: this many batches, train games only
