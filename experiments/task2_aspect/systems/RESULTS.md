@@ -5,6 +5,10 @@ Gold labels: `data/processed/task2_labels.jsonl` (7,002 sentences labeled by Cla
 Model choices (lexicon thresholds, epoch, decision threshold) were made on val; each system was
 scored on test once. Scores: `artifacts/task2/eval/<impl>_<split>.json` (from `evaluate.py`).
 
+The trained system C model is committed in `artifacts/task2/peft` (weights via Git LFS: run
+`git lfs pull` after cloning). Run the pipeline with it:
+`srt demo --reviews tests/fixtures/sample_reviews.json --game "Fake Game" --config configs/pipeline_task2.yaml`.
+
 ## Test results
 
 | System | Pair P | Pair R | Pair F1 | Aspect F1 | Aspect macro F1 | Polarity acc | Exact |
