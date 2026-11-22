@@ -94,9 +94,18 @@ follow_imports = "skip"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-# Task 2 system deps are optional extras: CI installs only [dev], so treat them as untyped.
-module = ["torch", "torch.*", "transformers", "transformers.*", "peft", "peft.*",
-          "vaderSentiment", "vaderSentiment.*"]
+# Heavy per-task libraries live in the .[task1]/.[task2]/.[task3] extras, but CI installs only
+# .[dev], so treat them as untyped.
+module = [
+    "torch", "torch.*",
+    "transformers", "transformers.*",
+    "peft", "peft.*",
+    "vaderSentiment", "vaderSentiment.*",
+    "datasets", "datasets.*",
+    "rouge_score", "rouge_score.*",
+    "bertopic", "bertopic.*",
+    "sentence_transformers", "sentence_transformers.*",
+]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

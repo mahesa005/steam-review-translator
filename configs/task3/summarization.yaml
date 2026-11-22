@@ -1,0 +1,58 @@
+# Konfigurasi Task 3 (owner: Lukas) - meta-review.
+#
+# Dipakai di experiments/task3_summarization/ dan bisa disalin ke `params:` pada
+# configs/pipeline.yaml saat Task 3 mau dijalankan di dalam pipeline CLI.
+
+# --- Model & checkpoint ---------------------------------------------------------------
+# E1/E2: facebook/bart-base, E3: t5-base, B2 (zero-shot): facebook/bart-large-cnn
+model:
+  architecture: bart          # bart | t5
+  name: facebook/bart-base
+  checkpoint: null            # path direktori hasil fine-tuning (menimpa `name`)
+
+# --- Masukan model (spec: Max input / target 1.024 / 256 BART; 512 / 256 T5) ----------
+input:
+  max_input_tokens: 1024      # BART; T5 = 512
+  max_new_tokens: 256
+  min_new_tokens: 20
+
+# --- Tahap [A]: seleksi paragraf (spec langkah 4: ~800 token BART, 400 token T5) -------
+preprocessing:
+  budget_tokens: 800
+  min_paragraph_words: 8
+  min_document_words: 100
+  alpha: 0.6                  # bobot TF-IDF vs keyword lexicon aspek
+
+# --- Tahap [C]: prefix aspek ---------------------------------------------------------
+aspects:
+  use_prefix: true            # false -> E1 (teks saja), true -> E2/E3
+  top_k: 5                    # top-5 aspek pada prefix
+
+# --- Decoding (spec: beam 4, no_repeat_ngram_size=3, length_penalty 1.0-2.0) ---------
+decoding:
+  num_beams: 4
+  length_penalty: 1.0
+  no_repeat_ngram_size: 3
+
+# --- Baseline ekstraktif (B1) ---------------------------------------------------------
+extractive:
+  method: textrank            # lead | textrank
+  k: 3
+
+# --- Evaluasi (spec bagian 5) ---------------------------------------------------------
+evaluation:
+  bootstrap_resamples: 1000
+  bootstrap_seed: 42
+  human_eval_samples: 30      # 20-30 sampel acak, 2 penilai, skala 1-5
+  error_analysis_samples: 50  # 50 sampel test, stratifikasi ROUGE-L
+
+# --- Fine-tuning (spec bagian 4) -----------------------------------------------------
+training:
+  learning_rate_bart: 3.0e-5
+  learning_rate_t5: 1.0e-4
+  per_device_batch_size: 4
+  gradient_accumulation_steps: 8   # batch efektif 32
+  num_train_epochs: 3
+  fp16: true
+  pilot_train_samples: 2000       # coba konfigurasi di subset 2.000 sampel dulu
+  seeds: [42, 43, 44]

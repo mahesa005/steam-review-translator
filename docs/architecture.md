@@ -44,6 +44,12 @@ other today; they could run in parallel later without changing any interface.
 | `core/logging.py` | `get_logger(name)`: stderr + `artifacts/logs/run.log`. |
 | `pipeline.py` | `Pipeline.run`, the implementation registries, `build_pipeline(config)`. |
 | `cli.py` | `srt demo ...` |
+| `summarization/preprocessing.py` | Task 3 step [A]: boilerplate filter, relevance scoring, paragraph selection. |
+| `summarization/aspects.py` | Task 3 step [B]: pseudo aspect table for training. |
+| `summarization/serialization.py` | Task 3 step [C]: `"aspects: ... </s> <text>"` input format. |
+| `summarization/extractive.py` | Task 3 baseline B1: Lead-k and TextRank. |
+| `summarization/transformer.py` | Task 3 B2/E1/E2/E3: BART and T5 generators (torch imported lazily). |
+| `summarization/metrics.py` | Task 3 evaluation: ROUGE, aspect coverage, polarity consistency, bootstrap. |
 
 ## Interfaces
 

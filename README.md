@@ -37,14 +37,17 @@ Details: [docs/architecture.md](docs/architecture.md).
 
 ## Quickstart
 
-Requires Python 3.11+.
+Requires Python 3.11+ (3.13 recommended).
+
+> **Windows note:** PyYAML has no wheel for Python 3.15 yet and building it needs MSVC.
+> Use Python 3.13 (or 3.12) for the venv: `py -3.13 -m venv .venv`.
 
 ```bash
 # setup (Linux/macOS, or Git Bash on Windows)
 make setup               # .venv + pip install -e ".[dev]" + pre-commit install
 
 # without make
-python3.11 -m venv .venv            # Windows: py -3.11 -m venv .venv
+python3.11 -m venv .venv            # Windows: py -3.13 -m venv .venv
 source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
@@ -84,7 +87,7 @@ e.g. `pip install -e ".[dev,task2]"`. CI installs only `.[dev]`.
 | `src/steam_review_translator/core/` | Shared contract: schemas, Protocols, config, logging |
 | `src/steam_review_translator/sentiment/` | Task 1 |
 | `src/steam_review_translator/aspect/` | Task 2 (lexicon, topic mapping, aggregation, sentence split) |
-| `src/steam_review_translator/summarization/` | Task 3 |
+| `src/steam_review_translator/summarization/` | Task 3 (praproses, serialisasi input, baseline ekstraktif, BART/T5, metrik) |
 | `src/steam_review_translator/pipeline.py` | Orchestration + implementation registries |
 | `src/steam_review_translator/cli.py` | `srt` command |
 | `configs/` | `pipeline.yaml` (which impl per task) + per-task configs |
@@ -104,6 +107,59 @@ e.g. `pip install -e ".[dev,task2]"`. CI installs only `.[dev]`.
 | Shared contract | all | `core/`, `pipeline.py` | | `configs/pipeline.yaml` |
 
 Branch/PR rules: [docs/contributing.md](docs/contributing.md).
+
+## Task 3 (meta-review) quickstart
+
+Task 3 follows the plan in `configs/task3/summarization.yaml`:
+
+- `[A]` `summarization.preprocessing` — drop boilerplate / short / duplicate paragraphs,
+  score relevance (TF-IDF vs. game title + aspect lexicon), select paragraphs under a
+  token budget (800 for BART, 400 for T5), flag documents under 100 words as invalid.
+- `[B]` `summarization.aspects` — pseudo aspect table for training (Task 2 lexicon for
+  frequency, Task 1 sentiment model for polarity, top-5 aspects).
+- `[C]` `summarization.serialization` — input format
+  `"aspects: gameplay (23, positive) ; story (11, positive) </s> <paragraphs>"`.
+- `summarization.extractive` — baseline B1 (Lead-k / TextRank).
+- `summarization.transformer` — B2 (BART-large-cnn zero-shot), E1 (BART, text only),
+  E2 (BART + aspect prefix), E3 (T5 + aspect prefix).
+- `summarization.metrics` — ROUGE-1/2/L/Lsum, aspect coverage, polarity consistency,
+  paired bootstrap.
+
+```bash
+# library only (no ML): extractive baseline inside the pipeline
+#   configs/pipeline.yaml -> summarization.impl: extractive
+# model runs (needs .[task3])
+python experiments/task3_summarization/train_bart.py --output artifacts/models/e2_bart --aspect-prefix
+python experiments/task3_summarization/train_t5.py  --output artifacts/models/e3_t5
+python experiments/task3_summarization/evaluate.py   --model artifacts/models/e2_bart --name E2 --aspect-prefix
+python experiments/task3_summarization/error_analysis.py --system E2=artifacts/runs/e2.json
+```
+
+### Mock data Task 1 + Task 2 (untuk Task 3)
+
+`tests/fixtures/mock_task3_input.json` = `MetaReviewInput` lengkap (12 review + distribusi
+sentimen Farrel + tabel aspek Mahesa) dan `tests/fixtures/mock_pipeline_output.json` =
+`PipelineOutput`. Keduanya dibuat dengan implementasi yang ada di repo, jadi langsung
+bisa dipakai sebagai payload model Task 3.
+
+Untuk data sendiri, dua skrip berikut:
+
+```bash
+# 1) payload Task 3 dari review apa pun (pakai impl yang dipilih di configs/pipeline.yaml)
+python experiments/task3_summarization/make_mock_inputs.py \
+    --reviews tests/fixtures/sample_reviews.json --game "Fake Game" --out-dir artifacts/runs/mock
+
+# 2) jalankan model Task 3 terhadap payload itu, lalu review outputnya
+python experiments/task3_summarization/run_inference.py \
+    --input artifacts/runs/mock/meta_review_input.json --out artifacts/runs/mock/pipeline_output.json
+
+# 3) ubah GameWikiSum lokal (data/raw/Full_GameWiki) jadi dataset training Task 3
+python experiments/task3_summarization/build_dataset.py \
+    --split train --out data/interim/task3/train.jsonl
+# satu DOKUMEN = satu sampel (test: 1.454 dokumen -> 1.449 valid, 5 dibuang <100 kata)
+```
+
+GameWikiSum is for academic use only — never commit the dataset or derived files.
 
 ## Adding a real implementation
 
