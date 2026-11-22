@@ -21,6 +21,7 @@ from common import (
     build_examples,
     load_split,
     load_task3_config,
+    make_compute_metrics,
     normalize_rows,
     resolve_fields,
 )
@@ -51,6 +52,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--budget-tokens", type=int, default=None)
     parser.add_argument("--pilot-samples", type=int, default=None)
     parser.add_argument("--fp16", action="store_true")
+    parser.add_argument(
+        "--max-val-samples", type=int, default=200, help="val docs for ROUGE-L model selection"
+    )
     parser.add_argument("--num-beams", type=int, default=None)
     parser.add_argument("--length-penalty", type=float, default=None)
     return parser.parse_args()
@@ -98,10 +102,17 @@ def main() -> int:
     train_rows = normalize_rows(train_rows, para_key, sum_key, title_key)
     val_rows = normalize_rows(val_rows, para_key, sum_key, title_key)
 
-    pilot = args.pilot_samples or train_cfg.get("pilot_train_samples")
+    # --pilot-samples 0 = full train split; not given = config default.
+    pilot = (
+        args.pilot_samples
+        if args.pilot_samples is not None
+        else train_cfg.get("pilot_train_samples")
+    )
     if pilot:
         train_rows = train_rows[:pilot]
         val_rows = val_rows[: max(pilot // 10, 1)]
+    # ROUGE-L on val needs generation every epoch: cap val so it stays affordable.
+    val_rows = val_rows[: args.max_val_samples]
 
     train_examples, train_stats = build_examples(
         train_rows,
@@ -182,6 +193,7 @@ def main() -> int:
         train_dataset=train_ds,
         eval_dataset=val_ds,
         data_collator=DataCollatorForSeq2Seq(tokenizer, model=model),
+        compute_metrics=make_compute_metrics(tokenizer),
         callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
     )
     trainer.train()
