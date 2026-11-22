@@ -1,0 +1,51 @@
+{
+  "args": {
+    "model": "roberta-base",
+    "data": "/content/srt/data/processed/task1/metacritic.parquet",
+    "max_length": 256,
+    "epochs": 3,
+    "batch_size": 32,
+    "lr": 2e-05,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.06,
+    "eval_every": 2000,
+    "max_train": null,
+    "max_val": null,
+    "fp16": true,
+    "seed": 42,
+    "run_name": null
+  },
+  "evals": [
+    {
+      "step": 2000,
+      "epoch": 0,
+      "val_macro_f1": 0.777469065676265
+    },
+    {
+      "step": 4000,
+      "epoch": 1,
+      "val_macro_f1": 0.7913376350286391
+    },
+    {
+      "step": 6000,
+      "epoch": 1,
+      "val_macro_f1": 0.7944760412231512
+    },
+    {
+      "step": 8000,
+      "epoch": 2,
+      "val_macro_f1": 0.8093978489780801
+    },
+    {
+      "step": 10000,
+      "epoch": 2,
+      "val_macro_f1": 0.8130912870435437
+    },
+    {
+      "step": 11706,
+      "epoch": 2,
+      "val_macro_f1": 0.8129000202387114
+    }
+  ],
+  "best_val_macro_f1": 0.8130912870435437
+}

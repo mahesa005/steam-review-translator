@@ -1,0 +1,116 @@
+2026-11-17 22:58:21,260 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:58:21,262 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:58:21,263 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:58:21,263 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-17 22:58:21,263 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:58:21,265 INFO steam_review_translator.pipeline stage task1.sentiment: done in 1.6 ms
+2026-11-17 22:58:21,265 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:58:21,266 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-17 22:58:21,266 INFO steam_review_translator.pipeline stage task2.aspect: done in 1.4 ms
+2026-11-17 22:58:21,266 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-17 22:58:21,266 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-17 22:58:21,270 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:58:21,271 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:58:21,271 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:58:21,272 INFO steam_review_translator.pipeline pipeline start: game='G' reviews=12
+2026-11-17 22:58:21,272 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:58:21,272 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.1 ms
+2026-11-17 22:58:21,272 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:58:21,275 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:58:21,276 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:58:21,276 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:58:21,276 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-17 22:58:21,276 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.2 ms
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-17 22:58:21,277 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-17 22:59:16,437 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:59:16,439 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.1 ms
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.2 ms
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-17 22:59:16,440 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-17 22:59:16,441 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline pipeline start: game='G' reviews=12
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-17 22:59:16,443 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:59:16,446 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-17 22:59:16,447 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-17 22:59:16,448 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-17 22:59:16,448 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.2 ms
+2026-11-17 22:59:16,448 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-17 22:59:16,448 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-18 00:14:38,540 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 00:14:38,542 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 00:14:38,543 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 00:14:38,543 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-18 00:14:38,543 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline stage task1.sentiment: done in 1.3 ms
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.4 ms
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-18 00:14:38,545 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-18 00:14:38,547 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline pipeline start: game='G' reviews=12
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-18 00:14:38,548 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 00:14:38,551 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.2 ms
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-18 00:14:38,553 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-18 07:23:12,784 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 07:23:12,786 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 07:23:12,786 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.5 ms
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.3 ms
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-18 07:23:12,787 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms
+2026-11-18 07:23:12,790 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline pipeline start: game='G' reviews=12
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-18 07:23:12,791 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 07:23:12,794 INFO steam_review_translator.pipeline sentiment: using 'mock' (MockSentimentAnalyzer)
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline aspect: using 'mock' (MockAspectTagger)
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline summarization: using 'mock' (MockMetaReviewGenerator)
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline pipeline start: game='Fake Game' reviews=12
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task1.sentiment: start
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task1.sentiment: done in 0.0 ms
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task2.aspect: start
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline task2: 23 sentences, 10 aspects
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task2.aspect: done in 0.2 ms
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task3.meta_review: start
+2026-11-18 07:23:12,796 INFO steam_review_translator.pipeline stage task3.meta_review: done in 0.0 ms

@@ -1,0 +1,46 @@
+train=124,837 val=25,743
+  {'C': 0.25, 'ngram_range': [1, 1]} val macro-F1=0.7182
+  {'C': 0.25, 'ngram_range': [1, 2]} val macro-F1=0.7362
+  {'C': 1.0, 'ngram_range': [1, 1]} val macro-F1=0.7180
+  {'C': 1.0, 'ngram_range': [1, 2]} val macro-F1=0.7456
+  {'C': 4.0, 'ngram_range': [1, 1]} val macro-F1=0.7085
+  {'C': 4.0, 'ngram_range': [1, 2]} val macro-F1=0.7400
+best {'C': 1.0, 'ngram_range': [1, 2]} val macro-F1=0.7456 -> /Users/muhammadfarrel/Documents/workspace/semester 7/NLP/steam-review-translator/artifacts/models/task1/s1_tfidf.pkl
+[metacritic val] scoring (for the ACC confusion matrix)
+    2,048/25,743 (3s)
+    4,096/25,743 (4s)
+    6,144/25,743 (4s)
+    8,192/25,743 (4s)
+    10,240/25,743 (5s)
+    12,288/25,743 (5s)
+    14,336/25,743 (6s)
+    16,384/25,743 (6s)
+    18,432/25,743 (6s)
+    20,480/25,743 (6s)
+    22,528/25,743 (6s)
+    24,576/25,743 (6s)
+    25,743/25,743 (6s)
+[metacritic test] scoring
+    2,048/24,257 (0s)
+    4,096/24,257 (0s)
+    6,144/24,257 (1s)
+    8,192/24,257 (1s)
+    10,240/24,257 (1s)
+    12,288/24,257 (1s)
+    14,336/24,257 (1s)
+    16,384/24,257 (1s)
+    18,432/24,257 (2s)
+    20,480/24,257 (2s)
+    22,528/24,257 (2s)
+    24,257/24,257 (2s)
+[steam] scoring
+    2,048/10,000 (0s)
+    4,096/10,000 (0s)
+    6,144/10,000 (1s)
+    8,192/10,000 (1s)
+    10,000/10,000 (1s)
+
+=== S1-tfidf-lr ===
+metacritic_test  acc=0.819 macroF1=0.733 | MAE=0.038 TVD=0.057 dom=0.97 bias={'positive': -0.048, 'negative': 0.011, 'neutral': 0.037} | ACC TVD=0.081
+steam            acc=0.832 macroF1=0.776 | MAE=0.118 TVD=0.118 dom=0.90 bias={'positive': -0.117, 'negative': 0.117} | ACC TVD=0.093
+-> /Users/muhammadfarrel/Documents/workspace/semester 7/NLP/steam-review-translator/artifacts/runs/task1/S1-tfidf-lr/metrics.json

@@ -41,9 +41,6 @@ data/**/Full_GameWiki/
 data/**/*.jsonl
 data/**/*.jsonl.gz
 
-# --- Artefak: models, embeddings, logs, run outputs ---
-artifacts/*
-!artifacts/.gitkeep
 
 # --- Model weights / checkpoints anywhere ---
 *.pt
