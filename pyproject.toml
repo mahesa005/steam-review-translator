@@ -31,6 +31,11 @@ task2 = [
     "hdbscan>=0.8.33,<1",
     "gensim>=4.3,<5",
     "scikit-learn>=1.3,<2",
+    # systems A (lexicon + VADER) and C (LoRA classifier, aspect/peft_tagger.py)
+    "vaderSentiment>=3.3,<4",
+    "torch>=2.2,<3",
+    "transformers>=4.40,<6",
+    "peft>=0.11,<1",
     # EDA (experiments/task2_aspect/eda)
     "polars>=1.0,<2",
     "pyarrow>=15",

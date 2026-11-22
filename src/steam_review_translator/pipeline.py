@@ -33,6 +33,8 @@ SENTIMENT_REGISTRY: dict[str, str] = {
 }
 ASPECT_REGISTRY: dict[str, str] = {
     "mock": "steam_review_translator.aspect.mock:MockAspectTagger",
+    "lexicon": "steam_review_translator.aspect.lexicon_tagger:LexiconAspectTagger",
+    "peft": "steam_review_translator.aspect.peft_tagger:PeftAspectTagger",
     # "bertopic": "steam_review_translator.aspect.bertopic_tagger:BertopicTagger",  # Mahesa
 }
 SUMMARIZATION_REGISTRY: dict[str, str] = {
