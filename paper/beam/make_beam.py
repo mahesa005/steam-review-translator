@@ -18,7 +18,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import (  # noqa: E402
-    Ellipse,
     FancyArrowPatch,
     FancyBboxPatch,
     Polygon,
@@ -152,6 +151,7 @@ EDGES = [
 # Long edges drawn as orthogonal polylines (waypoints) so they do not cross other nodes.
 ROUTES = {
     ("batchReviews", "t1_inference"): [(2.475, 6.75), (2.72, 6.75), (2.72, 9.6), (8.825, 9.6)],
+    ("batchReviews", "t2_split"): [(1.3, 5.85), (1.3, 5.3), (2.825, 5.3)],
     ("batchReviews", "t3_prepInput"): [(2.475, 6.05), (2.72, 6.05), (2.72, 1.0), (5.825, 1.0)],
     ("aspectTable", "t3_prepInput"): [(19.175, 5.3), (19.5, 5.3), (19.5, 0.3), (7.0, 0.3),
                                       (7.0, 0.45)],
@@ -192,15 +192,16 @@ def write_turtle(path: Path) -> None:
     path.write_text("\n".join(out), encoding="utf-8", newline="\n")
 
 
+# Colours and shapes follow the group's BEAM diagrams (diagram tool export).
 STYLE = {
-    "Data": {"fc": "#dbeafe", "ec": "#1d4ed8"},
-    "Symbol": {"fc": "#dcfce7", "ec": "#15803d"},
-    "StatisticalModel": {"fc": "#fde68a", "ec": "#b45309"},
-    "Training": {"fc": "#fce7f3", "ec": "#be185d"},
-    "Inference": {"fc": "#fce7f3", "ec": "#be185d"},
-    "Transformation": {"fc": "#ede9fe", "ec": "#6d28d9"},
-    "Engineering": {"fc": "#ede9fe", "ec": "#6d28d9"},
-    "Actor": {"fc": "#e5e7eb", "ec": "#374151"},
+    "Data": {"fc": "#c4e4fb", "ec": "#2b6cb0"},
+    "Symbol": {"fc": "#d3f0c8", "ec": "#4a9b3c"},
+    "StatisticalModel": {"fc": "#ecd2f5", "ec": "#8e5aa6"},
+    "Training": {"fc": "#ffc39f", "ec": "#d9733f"},
+    "Inference": {"fc": "#fdf2a9", "ec": "#c9a227"},
+    "Transformation": {"fc": "#fdf2a9", "ec": "#c9a227"},
+    "Engineering": {"fc": "#f7c9c9", "ec": "#c0504d"},
+    "Actor": {"fc": "#fcd68e", "ec": "#d79b28"},
 }
 W, H = 2.35, 1.1  # node box size
 
@@ -216,8 +217,9 @@ def shape(ax, kind: str, x: float, y: float):
                      (x + hw - cut, y - hh), (x - hw + cut, y - hh)], **kw)  # fmt: skip
     elif kind == "Actor":
         p = Polygon([(x, y + H / 2), (x - W / 2.4, y - H / 2), (x + W / 2.4, y - H / 2)], **kw)
-    else:
-        p = Ellipse((x, y), W, H, **kw)
+    else:  # processes: rounded rectangles
+        p = FancyBboxPatch((x - W / 2 + 0.12, y - H / 2 + 0.12), W - 0.24, H - 0.24,
+                           boxstyle="round,pad=0.12", **kw)  # fmt: skip
     ax.add_patch(p)
     return p
 
@@ -261,10 +263,11 @@ def draw(png: Path) -> None:
                                      color="#374151", zorder=2,
                                      connectionstyle="arc3,rad=0.0"))  # fmt: skip
     legend = [("Data", "Data"), ("Symbol", "Symbol"), ("StatisticalModel", "Model"),
-              ("Training", "Process"), ("Actor", "Actor")]  # fmt: skip
+              ("Training", "Training"), ("Inference", "Infer. / Transform"),
+              ("Engineering", "Engineering"), ("Actor", "Actor")]  # fmt: skip
     for i, (kind, name) in enumerate(legend):
         lx = 0.35
-        ly = 11.5 - i * 0.75
+        ly = 11.5 - i * 0.62
         ax.add_patch(Rectangle((lx, ly - 0.2), 0.45, 0.4, fc=STYLE[kind]["fc"],
                                ec=STYLE[kind]["ec"], lw=1.2))  # fmt: skip
         ax.text(lx + 0.6, ly, name, va="center", fontsize=9)

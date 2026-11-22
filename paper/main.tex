@@ -114,9 +114,9 @@ into the same pipeline.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{beam/beam_pipeline.pdf}
-  \caption{The Steam Review Translator in BEAM notation. Rectangles are instances (blue: data,
-  green: symbols), hexagons are statistical models, ellipses are processes (training, inference,
-  transformation, engineering) and the triangle is an actor. The batch of reviews is shared by
+  \caption{The Steam Review Translator in BEAM notation. Blue boxes are data, green boxes symbols,
+  purple hexagons statistical models, rounded boxes processes (orange: training, yellow: inference
+  and transformation, red: engineering) and the triangle an actor. The batch of reviews is shared by
   the three tasks, and the aspect table produced by Task~2 is an input of Task~3. The
   machine-readable description is in \texttt{paper/beam/beam.ttl}.}
   \label{fig:pipeline}
