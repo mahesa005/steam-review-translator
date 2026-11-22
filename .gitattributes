@@ -1,2 +1,4 @@
 # Normalize line endings so Windows and Unix teammates produce identical diffs.
 * text=auto eol=lf
+artifacts/task2/**/*.safetensors filter=lfs diff=lfs merge=lfs -text
+artifacts/task2/**/*.pt filter=lfs diff=lfs merge=lfs -text
