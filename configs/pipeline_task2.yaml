@@ -1,0 +1,16 @@
+# Pipeline with the real Task 2 tagger (system C, LoRA roberta-base); Tasks 1 and 3 stay mocks.
+# Needs the trained model in artifacts/task2/peft (experiments/task2_aspect/systems/train_peft.py)
+# and torch + transformers + peft installed.
+sentiment:          # Task 1 (Farrel)
+  impl: mock
+  params: {}
+
+aspect:             # Task 2 (Mahesa)
+  impl: peft
+  params:
+    model_dir: artifacts/task2/peft
+
+summarization:      # Task 3 (Lukas)
+  impl: mock
+  params:
+    top_k: 3

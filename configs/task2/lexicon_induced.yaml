@@ -1,0 +1,777 @@
+# Seed lexicon + terms induced from TRAIN labels by
+# experiments/task2_aspect/systems/build_lexicon.py
+# (min_precision 0.5, min_count 5). Do not edit by hand.
+aspects:
+  gameplay:
+    - "gameplay"
+    - "combat"
+    - "mechanics"
+    - "controls"
+    - "puzzle"
+    - "quest"
+    - "mission"
+    - "boss"
+    - "fight"
+    - "grind"
+    - "feel"   # 49 sent, precision 0.50
+    - "level"   # 45 sent, precision 0.57
+    - "the gameplay"   # 37 sent, precision 0.80
+    - "controller"   # 34 sent, precision 0.81
+    - "enemies"   # 34 sent, precision 0.68
+    - "puzzles"   # 32 sent, precision 0.70
+    - "use"   # 32 sent, precision 0.58
+    - "ships"   # 29 sent, precision 0.74
+    - "different"   # 28 sent, precision 0.52
+    - "feels"   # 28 sent, precision 0.52
+    - "weapons"   # 28 sent, precision 0.80
+    - "boring"   # 25 sent, precision 0.68
+    - "design"   # 25 sent, precision 0.69
+    - "gameplay is"   # 25 sent, precision 1.00
+    - "the controls"   # 25 sent, precision 0.96
+    - "weapon"   # 24 sent, precision 0.92
+    - "map"   # 23 sent, precision 0.55
+    - "keyboard"   # 20 sent, precision 0.83
+    - "the ai"   # 19 sent, precision 0.90
+    - "physics"   # 18 sent, precision 0.82
+    - "fast"   # 17 sent, precision 0.74
+    - "balance"   # 16 sent, precision 0.70
+    - "difficult"   # 16 sent, precision 0.50
+    - "driving"   # 16 sent, precision 0.80
+    - "guns"   # 16 sent, precision 0.80
+    - "hit"   # 16 sent, precision 0.67
+    - "kill"   # 16 sent, precision 0.70
+    - "units"   # 16 sent, precision 0.70
+    - "camera"   # 15 sent, precision 0.75
+    - "cover"   # 15 sent, precision 0.88
+    - "enemy"   # 15 sent, precision 0.68
+    - "a controller"   # 14 sent, precision 0.78
+    - "battle"   # 14 sent, precision 0.67
+    - "battles"   # 14 sent, precision 0.78
+    - "fights"   # 14 sent, precision 0.82
+    - "fun and"   # 14 sent, precision 0.78
+    - "fun to"   # 14 sent, precision 0.74
+    - "ways"   # 14 sent, precision 0.61
+    - "action"   # 13 sent, precision 0.68
+    - "control"   # 13 sent, precision 0.76
+    - "controls are"   # 13 sent, precision 1.00
+    - "easy to"   # 13 sent, precision 0.68
+    - "factions"   # 13 sent, precision 0.72
+    - "fleet"   # 13 sent, precision 0.81
+    - "gameplay and"   # 13 sent, precision 0.93
+    - "slow"   # 13 sent, precision 0.72
+    - "special"   # 13 sent, precision 0.62
+    - "win"   # 13 sent, precision 0.68
+    - "ai is"   # 12 sent, precision 1.00
+    - "bosses"   # 12 sent, precision 0.63
+    - "doing"   # 12 sent, precision 0.52
+    - "drive"   # 12 sent, precision 0.52
+    - "eldar"   # 12 sent, precision 0.75
+    - "level design"   # 12 sent, precision 0.92
+    - "linear"   # 12 sent, precision 0.80
+    - "movement"   # 12 sent, precision 1.00
+    - "plays"   # 12 sent, precision 0.50
+    - "ship"   # 12 sent, precision 0.63
+    - "simple"   # 12 sent, precision 0.63
+    - "the combat"   # 12 sent, precision 1.00
+    - "to use"   # 12 sent, precision 0.75
+    - "upgrades"   # 12 sent, precision 0.75
+    - "basically"   # 11 sent, precision 0.50
+    - "clunky"   # 11 sent, precision 0.73
+    - "die"   # 11 sent, precision 0.73
+    - "frustrating"   # 11 sent, precision 0.58
+    - "skills"   # 11 sent, precision 0.85
+    - "strategy"   # 11 sent, precision 0.61
+    - "the level"   # 11 sent, precision 0.79
+    - "upgrade"   # 11 sent, precision 1.00
+    - "ability"   # 10 sent, precision 0.62
+    - "annoying"   # 10 sent, precision 0.50
+    - "awkward"   # 10 sent, precision 0.71
+    - "balancing"   # 10 sent, precision 0.83
+    - "button"   # 10 sent, precision 0.67
+    - "car"   # 10 sent, precision 0.56
+    - "certain"   # 10 sent, precision 0.56
+    - "damage"   # 10 sent, precision 0.91
+    - "extremely"   # 10 sent, precision 0.53
+    - "feels like"   # 10 sent, precision 0.50
+    - "fighting"   # 10 sent, precision 0.67
+    - "gun"   # 10 sent, precision 0.59
+    - "instead of"   # 10 sent, precision 0.59
+    - "play as"   # 10 sent, precision 0.62
+    - "random"   # 10 sent, precision 0.71
+    - "the map"   # 10 sent, precision 0.53
+    - "the puzzles"   # 10 sent, precision 0.62
+    - "to win"   # 10 sent, precision 0.71
+    - "useless"   # 10 sent, precision 0.91
+    - "combat is"   # 9 sent, precision 0.90
+    - "commander"   # 9 sent, precision 0.75
+    - "designed"   # 9 sent, precision 0.75
+    - "jump"   # 9 sent, precision 0.69
+    - "jumping"   # 9 sent, precision 0.90
+    - "options"   # 9 sent, precision 0.50
+    - "person"   # 9 sent, precision 0.53
+    - "quick"   # 9 sent, precision 0.75
+    - "shooting"   # 9 sent, precision 0.75
+    - "speed"   # 9 sent, precision 0.82
+    - "tricks"   # 9 sent, precision 0.90
+    - "are fun"   # 8 sent, precision 1.00
+    - "comes"   # 8 sent, precision 0.53
+    - "customization"   # 8 sent, precision 0.57
+    - "difficult to"   # 8 sent, precision 0.80
+    - "early"   # 8 sent, precision 0.67
+    - "hold"   # 8 sent, precision 0.73
+    - "is fun"   # 8 sent, precision 0.62
+    - "items"   # 8 sent, precision 0.73
+    - "limited"   # 8 sent, precision 0.62
+    - "platforming"   # 8 sent, precision 0.89
+    - "pretty much"   # 8 sent, precision 0.62
+    - "shoot"   # 8 sent, precision 0.53
+    - "spawn"   # 8 sent, precision 0.80
+    - "sword"   # 8 sent, precision 0.62
+    - "the eldar"   # 8 sent, precision 0.80
+    - "to drive"   # 8 sent, precision 0.80
+    - "to kill"   # 8 sent, precision 0.89
+    - "your ships"   # 8 sent, precision 0.89
+    - "abilities"   # 7 sent, precision 0.88
+    - "adding"   # 7 sent, precision 0.64
+    - "are great"   # 7 sent, precision 0.58
+    - "aspect"   # 7 sent, precision 0.58
+    - "at times"   # 7 sent, precision 0.50
+    - "attacks"   # 7 sent, precision 0.88
+    - "commanders"   # 7 sent, precision 0.70
+    - "core"   # 7 sent, precision 0.70
+    - "doesnt"   # 7 sent, precision 0.78
+    - "graphics and"   # 7 sent, precision 0.50
+    - "great and"   # 7 sent, precision 0.58
+    - "head"   # 7 sent, precision 0.64
+    - "minutes"   # 7 sent, precision 0.50
+    - "mix"   # 7 sent, precision 0.64
+    - "moves"   # 7 sent, precision 1.00
+    - "number"   # 7 sent, precision 0.54
+    - "number of"   # 7 sent, precision 0.54
+    - "perfectly"   # 7 sent, precision 0.54
+    - "perks"   # 7 sent, precision 0.70
+    - "playable"   # 7 sent, precision 0.50
+    - "solving"   # 7 sent, precision 1.00
+    - "switch"   # 7 sent, precision 0.70
+    - "systems"   # 7 sent, precision 1.00
+    - "tactics"   # 7 sent, precision 0.88
+    - "tanks"   # 7 sent, precision 0.70
+    - "targets"   # 7 sent, precision 0.58
+    - "the physics"   # 7 sent, precision 0.88
+    - "unlock"   # 7 sent, precision 0.64
+    - "usually"   # 7 sent, precision 0.58
+    - "vehicle"   # 7 sent, precision 0.64
+    - "ways to"   # 7 sent, precision 0.70
+    - "weapons and"   # 7 sent, precision 0.70
+    - "worse than"   # 7 sent, precision 0.50
+    - "a nice"   # 6 sent, precision 0.60
+    - "and boring"   # 6 sent, precision 0.67
+    - "attack"   # 6 sent, precision 0.75
+    - "balanced"   # 6 sent, precision 1.00
+    - "basic"   # 6 sent, precision 0.50
+    - "boost"   # 6 sent, precision 1.00
+    - "chance"   # 6 sent, precision 0.55
+    - "changed"   # 6 sent, precision 0.60
+    - "chests"   # 6 sent, precision 1.00
+    - "death"   # 6 sent, precision 0.67
+    - "dream"   # 6 sent, precision 0.55
+    - "each level"   # 6 sent, precision 0.86
+    - "elements"   # 6 sent, precision 0.55
+    - "explosions"   # 6 sent, precision 0.86
+    - "faction"   # 6 sent, precision 0.86
+    - "figure out"   # 6 sent, precision 0.55
+    - "focus"   # 6 sent, precision 0.67
+    - "game are"   # 6 sent, precision 0.55
+    - "gems"   # 6 sent, precision 0.86
+    - "gunplay"   # 6 sent, precision 0.86
+    - "health"   # 6 sent, precision 0.75
+    - "hit and"   # 6 sent, precision 1.00
+    - "in terms"   # 6 sent, precision 0.55
+    - "is great"   # 6 sent, precision 0.50
+    - "keyboard controls"   # 6 sent, precision 0.86
+    - "level and"   # 6 sent, precision 0.67
+    - "mechanic"   # 6 sent, precision 0.86
+    - "mechanics are"   # 6 sent, precision 0.86
+    - "modes"   # 6 sent, precision 0.50
+    - "mouse"   # 6 sent, precision 0.75
+    - "pay to"   # 6 sent, precision 0.67
+    - "pistol"   # 6 sent, precision 1.00
+    - "progression"   # 6 sent, precision 0.75
+    - "puzzles are"   # 6 sent, precision 0.75
+    - "requires"   # 6 sent, precision 0.55
+    - "straight"   # 6 sent, precision 0.60
+    - "terms"   # 6 sent, precision 0.55
+    - "terms of"   # 6 sent, precision 0.55
+    - "the boss"   # 6 sent, precision 0.67
+    - "the car"   # 6 sent, precision 0.86
+    - "the core"   # 6 sent, precision 0.86
+    - "the enemies"   # 6 sent, precision 0.55
+    - "the player"   # 6 sent, precision 0.50
+    - "the right"   # 6 sent, precision 0.67
+    - "the weapons"   # 6 sent, precision 0.86
+    - "thing i"   # 6 sent, precision 0.55
+    - "your character"   # 6 sent, precision 0.60
+    - "a certain"   # 5 sent, precision 0.71
+    - "a keyboard"   # 5 sent, precision 1.00
+    - "actions"   # 5 sent, precision 1.00
+    - "advantage"   # 5 sent, precision 0.71
+    - "aliens"   # 5 sent, precision 0.62
+    - "ammo"   # 5 sent, precision 0.71
+    - "barely"   # 5 sent, precision 0.50
+    - "beginning"   # 5 sent, precision 0.71
+    - "boss fights"   # 5 sent, precision 0.71
+    - "boxes"   # 5 sent, precision 1.00
+    - "changes"   # 5 sent, precision 0.71
+    - "checkpoints"   # 5 sent, precision 0.62
+    - "collect"   # 5 sent, precision 0.83
+    - "comes to"   # 5 sent, precision 0.71
+    - "corner"   # 5 sent, precision 0.71
+    - "customize"   # 5 sent, precision 0.83
+    - "exact"   # 5 sent, precision 0.56
+    - "executed"   # 5 sent, precision 0.83
+    - "failed"   # 5 sent, precision 0.83
+    - "fair"   # 5 sent, precision 0.62
+    - "feel of"   # 5 sent, precision 0.71
+    - "firing"   # 5 sent, precision 0.83
+    - "fluid"   # 5 sent, precision 0.83
+    - "germans"   # 5 sent, precision 1.00
+    - "grappling"   # 5 sent, precision 1.00
+    - "ground"   # 5 sent, precision 0.62
+    - "harder"   # 5 sent, precision 0.56
+    - "impossible to"   # 5 sent, precision 0.62
+    - "improve"   # 5 sent, precision 0.56
+    - "is quite"   # 5 sent, precision 0.56
+    - "it's too"   # 5 sent, precision 0.83
+    - "just the"   # 5 sent, precision 0.50
+    - "kills"   # 5 sent, precision 0.83
+    - "length"   # 5 sent, precision 0.50
+    - "leveling"   # 5 sent, precision 1.00
+    - "loot"   # 5 sent, precision 0.71
+    - "lot more"   # 5 sent, precision 0.62
+    - "makes the"   # 5 sent, precision 0.71
+    - "many ways"   # 5 sent, precision 0.71
+    - "map is"   # 5 sent, precision 0.83
+    - "matter"   # 5 sent, precision 0.83
+    - "nerf"   # 5 sent, precision 1.00
+    - "of enemies"   # 5 sent, precision 0.62
+    - "of gameplay"   # 5 sent, precision 0.62
+    - "offers"   # 5 sent, precision 0.71
+    - "only thing"   # 5 sent, precision 0.50
+    - "pace"   # 5 sent, precision 0.71
+    - "pain"   # 5 sent, precision 0.71
+    - "problem is"   # 5 sent, precision 0.56
+    - "puzzle solving"   # 5 sent, precision 1.00
+    - "races"   # 5 sent, precision 0.71
+    - "randomly"   # 5 sent, precision 0.71
+    - "road"   # 5 sent, precision 0.71
+    - "russian"   # 5 sent, precision 0.62
+    - "same time"   # 5 sent, precision 0.56
+    - "sequences"   # 5 sent, precision 0.83
+    - "similar to"   # 5 sent, precision 0.56
+    - "simulation"   # 5 sent, precision 0.83
+    - "skill"   # 5 sent, precision 0.71
+    - "spam"   # 5 sent, precision 0.83
+    - "spot"   # 5 sent, precision 0.62
+    - "take cover"   # 5 sent, precision 1.00
+    - "the bad"   # 5 sent, precision 0.50
+    - "the camera"   # 5 sent, precision 0.71
+    - "the final"   # 5 sent, precision 0.50
+    - "the fun"   # 5 sent, precision 1.00
+    - "there's no"   # 5 sent, precision 0.56
+    - "to open"   # 5 sent, precision 0.83
+    - "tutorial"   # 5 sent, precision 0.62
+    - "unbalanced"   # 5 sent, precision 0.83
+    - "unlocking"   # 5 sent, precision 1.00
+    - "unrealistic"   # 5 sent, precision 0.56
+    - "use a"   # 5 sent, precision 1.00
+    - "very difficult"   # 5 sent, precision 0.62
+    - "walk"   # 5 sent, precision 0.56
+    - "weapons are"   # 5 sent, precision 1.00
+    - "winter"   # 5 sent, precision 0.62
+    - "you die"   # 5 sent, precision 0.83
+    - "you feel"   # 5 sent, precision 0.50
+  story:
+    - "story"
+    - "plot"
+    - "narrative"
+    - "characters"
+    - "dialogue"
+    - "ending"
+    - "lore"
+    - "campaign"
+    - "the story"   # 73 sent, precision 0.90
+    - "story is"   # 36 sent, precision 0.95
+    - "interesting"   # 19 sent, precision 0.50
+    - "universe"   # 17 sent, precision 0.55
+    - "story and"   # 13 sent, precision 0.87
+    - "the characters"   # 12 sent, precision 0.67
+    - "line"   # 11 sent, precision 0.65
+    - "lockdown"   # 9 sent, precision 0.69
+    - "tower"   # 9 sent, precision 0.75
+    - "dragon"   # 8 sent, precision 0.57
+    - "story line"   # 8 sent, precision 1.00
+    - "a story"   # 7 sent, precision 0.88
+    - "bay"   # 7 sent, precision 0.70
+    - "story but"   # 7 sent, precision 1.00
+    - "story that"   # 7 sent, precision 1.00
+    - "storyline"   # 7 sent, precision 0.78
+    - "confusing"   # 6 sent, precision 0.75
+    - "optimus"   # 6 sent, precision 0.50
+    - "bayformers"   # 5 sent, precision 0.50
+    - "deep"   # 5 sent, precision 0.56
+    - "girl"   # 5 sent, precision 1.00
+    - "good story"   # 5 sent, precision 1.00
+    - "interesting but"   # 5 sent, precision 0.71
+    - "story itself"   # 5 sent, precision 1.00
+    - "story was"   # 5 sent, precision 1.00
+  graphics:
+    - "graphics"
+    - "visuals"
+    - "art style"
+    - "textures"
+    - "animation"
+    - "lighting"
+    - "aesthetic"
+    - "looks"   # 52 sent, precision 0.91
+    - "look"   # 34 sent, precision 0.60
+    - "the graphics"   # 28 sent, precision 0.90
+    - "graphics are"   # 24 sent, precision 1.00
+    - "art"   # 22 sent, precision 0.81
+    - "animations"   # 20 sent, precision 0.91
+    - "models"   # 17 sent, precision 0.89
+    - "it looks"   # 16 sent, precision 0.89
+    - "graphics and"   # 14 sent, precision 1.00
+    - "effects"   # 13 sent, precision 0.72
+    - "graphic"   # 12 sent, precision 0.86
+    - "looks great"   # 10 sent, precision 1.00
+    - "environments"   # 9 sent, precision 0.75
+    - "looks like"   # 9 sent, precision 0.69
+    - "quality"   # 9 sent, precision 0.60
+    - "gorgeous"   # 8 sent, precision 1.00
+    - "texture"   # 8 sent, precision 0.73
+    - "are great"   # 7 sent, precision 0.58
+    - "game looks"   # 7 sent, precision 0.88
+    - "animations are"   # 6 sent, precision 1.00
+    - "city"   # 6 sent, precision 0.67
+    - "environment"   # 6 sent, precision 0.50
+    - "graphical"   # 6 sent, precision 0.50
+    - "presentation"   # 6 sent, precision 1.00
+    - "the art"   # 6 sent, precision 1.00
+    - "the environments"   # 6 sent, precision 0.75
+    - "and looks"   # 5 sent, precision 1.00
+    - "better graphics"   # 5 sent, precision 0.83
+    - "detailed"   # 5 sent, precision 0.62
+    - "nice and"   # 5 sent, precision 0.83
+    - "screenshots"   # 5 sent, precision 0.71
+    - "stunning"   # 5 sent, precision 1.00
+    - "the animations"   # 5 sent, precision 1.00
+    - "the screenshots"   # 5 sent, precision 0.71
+    - "visual"   # 5 sent, precision 0.62
+    - "visually"   # 5 sent, precision 1.00
+    - "visuals are"   # 5 sent, precision 1.00
+  audio:
+    - "music"
+    - "soundtrack"
+    - "sound"
+    - "sound effects"
+    - "voice acting"
+    - "audio"
+    - "voice"   # 32 sent, precision 1.00
+    - "acting"   # 19 sent, precision 0.95
+    - "the music"   # 15 sent, precision 1.00
+    - "sounds"   # 14 sent, precision 0.82
+    - "the voice"   # 12 sent, precision 1.00
+    - "the soundtrack"   # 8 sent, precision 1.00
+    - "voices"   # 8 sent, precision 0.89
+    - "actors"   # 5 sent, precision 1.00
+    - "background"   # 5 sent, precision 0.83
+    - "sounds are"   # 5 sent, precision 1.00
+  performance:
+    - "fps"
+    - "framerate"
+    - "lag"
+    - "stutter"
+    - "crash"
+    - "crashes"
+    - "bug"
+    - "bugs"
+    - "optimization"
+    - "freeze"
+    - "glitch"
+    - "issues"   # 31 sent, precision 0.63
+    - "performance"   # 28 sent, precision 0.93
+    - "glitches"   # 19 sent, precision 0.90
+    - "servers"   # 19 sent, precision 0.66
+    - "fix"   # 17 sent, precision 0.50
+    - "runs"   # 16 sent, precision 0.84
+    - "drm"   # 15 sent, precision 0.94
+    - "screen"   # 14 sent, precision 0.54
+    - "buggy"   # 13 sent, precision 0.87
+    - "optimized"   # 13 sent, precision 1.00
+    - "computer"   # 12 sent, precision 0.71
+    - "connection"   # 12 sent, precision 0.75
+    - "server"   # 11 sent, precision 0.73
+    - "bugs and"   # 10 sent, precision 0.83
+    - "fixed"   # 10 sent, precision 0.56
+    - "always online"   # 9 sent, precision 1.00
+    - "broken"   # 9 sent, precision 0.64
+    - "launch"   # 9 sent, precision 0.82
+    - "loading"   # 9 sent, precision 0.82
+    - "of bugs"   # 9 sent, precision 1.00
+    - "the performance"   # 9 sent, precision 1.00
+    - "checkpoint"   # 8 sent, precision 0.50
+    - "drops"   # 8 sent, precision 0.67
+    - "goes"   # 8 sent, precision 0.50
+    - "internet"   # 8 sent, precision 0.73
+    - "technical"   # 8 sent, precision 0.80
+    - "to run"   # 8 sent, precision 0.62
+    - "unplayable"   # 8 sent, precision 0.62
+    - "breaking"   # 7 sent, precision 0.64
+    - "card"   # 7 sent, precision 0.78
+    - "frame"   # 7 sent, precision 0.78
+    - "gtx"   # 7 sent, precision 0.88
+    - "it works"   # 7 sent, precision 0.54
+    - "offline"   # 7 sent, precision 0.64
+    - "some reason"   # 7 sent, precision 0.70
+    - "the bugs"   # 7 sent, precision 1.00
+    - "a decent"   # 6 sent, precision 0.50
+    - "constant"   # 6 sent, precision 0.86
+    - "dx12"   # 6 sent, precision 1.00
+    - "game breaking"   # 6 sent, precision 0.86
+    - "it crashes"   # 6 sent, precision 1.00
+    - "minor"   # 6 sent, precision 0.55
+    - "of people"   # 6 sent, precision 0.50
+    - "performance is"   # 6 sent, precision 1.00
+    - "rig"   # 6 sent, precision 0.86
+    - "the server"   # 6 sent, precision 1.00
+    - "the servers"   # 6 sent, precision 0.60
+    - "to work"   # 6 sent, precision 0.60
+    - "60 fps"   # 5 sent, precision 1.00
+    - "60fps"   # 5 sent, precision 0.83
+    - "970"   # 5 sent, precision 1.00
+    - "bugged"   # 5 sent, precision 1.00
+    - "encountered"   # 5 sent, precision 0.71
+    - "fix the"   # 5 sent, precision 0.71
+    - "frame rate"   # 5 sent, precision 0.71
+    - "gone"   # 5 sent, precision 0.50
+    - "gpu"   # 5 sent, precision 1.00
+    - "install"   # 5 sent, precision 0.71
+    - "internet connection"   # 5 sent, precision 0.71
+    - "issues and"   # 5 sent, precision 1.00
+    - "issues with"   # 5 sent, precision 0.71
+    - "it runs"   # 5 sent, precision 0.71
+    - "loads"   # 5 sent, precision 1.00
+    - "locked"   # 5 sent, precision 0.83
+    - "many bugs"   # 5 sent, precision 1.00
+    - "need a"   # 5 sent, precision 0.62
+    - "optimisation"   # 5 sent, precision 1.00
+    - "requirements"   # 5 sent, precision 1.00
+    - "restart"   # 5 sent, precision 0.56
+    - "run it"   # 5 sent, precision 0.71
+    - "saves"   # 5 sent, precision 0.83
+    - "sli"   # 5 sent, precision 1.00
+    - "specs"   # 5 sent, precision 1.00
+    - "technical issues"   # 5 sent, precision 1.00
+    - "turning"   # 5 sent, precision 0.56
+    - "vsync"   # 5 sent, precision 1.00
+  price:
+    - "price"
+    - "worth"
+    - "money"
+    - "expensive"
+    - "cheap"
+    - "sale"
+    - "discount"
+    - "refund"
+    - "dlc"
+    - "microtransactions"
+    - "pay"   # 23 sent, precision 0.79
+    - "on sale"   # 22 sent, precision 0.96
+    - "the price"   # 18 sent, precision 1.00
+    - "full price"   # 15 sent, precision 0.94
+    - "bucks"   # 14 sent, precision 0.93
+    - "worth the"   # 14 sent, precision 0.78
+    - "not worth"   # 12 sent, precision 0.71
+    - "waste"   # 10 sent, precision 0.53
+    - "your money"   # 10 sent, precision 0.77
+    - "dollars"   # 9 sent, precision 0.90
+    - "a sale"   # 8 sent, precision 1.00
+    - "my money"   # 7 sent, precision 0.78
+    - "pay to"   # 7 sent, precision 0.78
+    - "till"   # 7 sent, precision 0.78
+    - "wasted"   # 7 sent, precision 0.88
+    - "price of"   # 6 sent, precision 1.00
+    - "a refund"   # 5 sent, precision 0.83
+    - "be worth"   # 5 sent, precision 0.56
+    - "is worth"   # 5 sent, precision 0.50
+    - "of money"   # 5 sent, precision 1.00
+    - "paid"   # 5 sent, precision 0.56
+    - "sale and"   # 5 sent, precision 1.00
+    - "to pay"   # 5 sent, precision 0.71
+    - "wait till"   # 5 sent, precision 1.00
+    - "waste of"   # 5 sent, precision 0.71
+  multiplayer:
+    - "multiplayer"
+    - "co-op"
+    - "coop"
+    - "online"
+    - "pvp"
+    - "servers"
+    - "matchmaking"
+    - "escalation"   # 26 sent, precision 0.67
+    - "friends"   # 26 sent, precision 0.63
+    - "the multiplayer"   # 22 sent, precision 0.79
+    - "players"   # 21 sent, precision 0.54
+    - "multiplayer is"   # 14 sent, precision 1.00
+    - "with friends"   # 13 sent, precision 0.76
+    - "in multiplayer"   # 11 sent, precision 0.79
+    - "no multiplayer"   # 9 sent, precision 1.00
+    - "play with"   # 9 sent, precision 0.64
+    - "escalation mode"   # 8 sent, precision 0.89
+    - "a multiplayer"   # 6 sent, precision 0.67
+    - "friends and"   # 6 sent, precision 0.86
+    - "no pvp"   # 6 sent, precision 1.00
+    - "of multiplayer"   # 6 sent, precision 1.00
+    - "online multiplayer"   # 6 sent, precision 1.00
+    - "friend"   # 5 sent, precision 0.62
+    - "horde"   # 5 sent, precision 0.71
+    - "local"   # 5 sent, precision 0.62
+    - "mmo"   # 5 sent, precision 1.00
+    - "network"   # 5 sent, precision 0.83
+    - "playing with"   # 5 sent, precision 0.50
+    - "pvp multiplayer"   # 5 sent, precision 1.00
+  difficulty:
+    - "difficulty"
+    - "challenging"
+    - "punishing"
+    - "balance"
+    - "learning curve"
+    - "difficult"   # 22 sent, precision 0.69
+    - "challenge"   # 14 sent, precision 0.67
+    - "die"   # 9 sent, precision 0.60
+    - "the difficulty"   # 9 sent, precision 1.00
+    - "hardest"   # 8 sent, precision 0.80
+    - "the puzzles"   # 8 sent, precision 0.50
+    - "easier"   # 7 sent, precision 0.88
+    - "puzzles are"   # 7 sent, precision 0.88
+    - "the hardest"   # 7 sent, precision 0.78
+    - "a challenge"   # 6 sent, precision 0.75
+    - "and challenging"   # 6 sent, precision 1.00
+    - "harder"   # 6 sent, precision 0.67
+    - "normal"   # 6 sent, precision 0.75
+    - "very difficult"   # 6 sent, precision 0.75
+    - "difficulty spikes"   # 5 sent, precision 1.00
+    - "kill you"   # 5 sent, precision 1.00
+    - "spikes"   # 5 sent, precision 0.83
+  content:
+    - "content"
+    - "replayability"
+    - "hours"
+    - "length"
+    - "variety"
+    - "updates"
+    - "endgame"
+    - "short"   # 52 sent, precision 0.70
+    - "levels"   # 30 sent, precision 0.53
+    - "replay"   # 17 sent, precision 0.77
+    - "maps"   # 16 sent, precision 0.53
+    - "2 hours"   # 12 sent, precision 0.80
+    - "challenges"   # 12 sent, precision 0.52
+    - "replay value"   # 11 sent, precision 1.00
+    - "value"   # 11 sent, precision 0.79
+    - "very short"   # 10 sent, precision 0.83
+    - "hours to"   # 9 sent, precision 0.90
+    - "of cars"   # 9 sent, precision 0.82
+    - "a short"   # 8 sent, precision 0.73
+    - "short but"   # 8 sent, precision 1.00
+    - "short game"   # 8 sent, precision 0.89
+    - "to complete"   # 8 sent, precision 0.73
+    - "variety of"   # 8 sent, precision 0.73
+    - "explore"   # 7 sent, precision 1.00
+    - "levels and"   # 7 sent, precision 0.64
+    - "plenty"   # 7 sent, precision 0.58
+    - "took me"   # 7 sent, precision 0.88
+    - "open world"   # 6 sent, precision 0.50
+    - "plenty of"   # 6 sent, precision 0.55
+    - "targets"   # 6 sent, precision 0.50
+    - "ways to"   # 6 sent, precision 0.60
+    - "is short"   # 5 sent, precision 1.00
+    - "selection"   # 5 sent, precision 1.00
+    - "short and"   # 5 sent, precision 0.71
+    - "to explore"   # 5 sent, precision 1.00
+  overall:
+    - "recommend"
+    - "10/10"
+    - "masterpiece"
+    - "goty"
+    - "buy"   # 83 sent, precision 0.67
+    - "a good"   # 40 sent, precision 0.56
+    - "overall"   # 37 sent, precision 0.62
+    - "recommend this"   # 37 sent, precision 0.86
+    - "great game"   # 35 sent, precision 0.95
+    - "fan"   # 34 sent, precision 0.74
+    - "good game"   # 33 sent, precision 0.89
+    - "love"   # 32 sent, precision 0.58
+    - "buy this"   # 27 sent, precision 0.82
+    - "game for"   # 27 sent, precision 0.56
+    - "a great"   # 25 sent, precision 0.61
+    - "hitman"   # 24 sent, precision 0.52
+    - "game but"   # 23 sent, precision 0.62
+    - "the best"   # 23 sent, precision 0.51
+    - "enjoyed"   # 22 sent, precision 0.79
+    - "rts"   # 22 sent, precision 0.59
+    - "40k"   # 21 sent, precision 0.58
+    - "if you're"   # 20 sent, precision 0.65
+    - "buy it"   # 19 sent, precision 0.83
+    - "buying"   # 19 sent, precision 0.61
+    - "game to"   # 19 sent, precision 0.51
+    - "highly"   # 18 sent, precision 0.72
+    - "you like"   # 17 sent, precision 0.89
+    - "as good"   # 15 sent, precision 0.83
+    - "good as"   # 15 sent, precision 0.83
+    - "loved"   # 15 sent, precision 0.54
+    - "recommend it"   # 15 sent, precision 1.00
+    - "solid"   # 15 sent, precision 0.58
+    - "shooter"   # 14 sent, precision 0.54
+    - "would recommend"   # 14 sent, precision 0.93
+    - "game if"   # 13 sent, precision 0.54
+    - "highly recommend"   # 13 sent, precision 1.00
+    - "i recommend"   # 13 sent, precision 0.65
+    - "the series"   # 13 sent, precision 0.54
+    - "warhammer"   # 13 sent, precision 0.62
+    - "8/10"   # 12 sent, precision 0.80
+    - "definitely"   # 12 sent, precision 0.57
+    - "fans"   # 12 sent, precision 0.57
+    - "racing"   # 12 sent, precision 0.52
+    - "fan of"   # 11 sent, precision 0.61
+    - "not buy"   # 11 sent, precision 0.85
+    - "of light"   # 11 sent, precision 0.50
+    - "blood"   # 10 sent, precision 0.50
+    - "blood money"   # 10 sent, precision 0.62
+    - "ever played"   # 10 sent, precision 0.91
+    - "fun game"   # 10 sent, precision 0.91
+    - "love this"   # 10 sent, precision 0.83
+    - "stay"   # 10 sent, precision 0.53
+    - "waste"   # 10 sent, precision 0.53
+    - "a fan"   # 9 sent, precision 0.82
+    - "coh2"   # 9 sent, precision 0.53
+    - "disappointed"   # 9 sent, precision 0.64
+    - "dont buy"   # 9 sent, precision 0.82
+    - "enjoying"   # 9 sent, precision 0.82
+    - "game a"   # 9 sent, precision 0.56
+    - "game it"   # 9 sent, precision 0.69
+    - "i highly"   # 9 sent, precision 0.90
+    - "i loved"   # 9 sent, precision 0.60
+    - "nostalgia"   # 9 sent, precision 0.69
+    - "remake"   # 9 sent, precision 0.64
+    - "warhammer 40k"   # 9 sent, precision 0.75
+    - "worth it"   # 9 sent, precision 0.53
+    - "you're a"   # 9 sent, precision 0.75
+    - "40k game"   # 8 sent, precision 0.89
+    - "9/10"   # 8 sent, precision 0.73
+    - "can't recommend"   # 8 sent, precision 1.00
+    - "easily"   # 8 sent, precision 0.50
+    - "fantastic"   # 8 sent, precision 0.67
+    - "franchise"   # 8 sent, precision 0.53
+    - "game just"   # 8 sent, precision 0.57
+    - "garbage"   # 8 sent, precision 0.62
+    - "good and"   # 8 sent, precision 0.62
+    - "much better"   # 8 sent, precision 0.67
+    - "of fun"   # 8 sent, precision 0.50
+    - "overall i"   # 8 sent, precision 0.89
+    - "recommend to"   # 8 sent, precision 1.00
+    - "very fun"   # 8 sent, precision 0.73
+    - "very good"   # 8 sent, precision 0.50
+    - "7/10"   # 7 sent, precision 0.70
+    - "a fun"   # 7 sent, precision 0.88
+    - "a long"   # 7 sent, precision 0.54
+    - "buy the"   # 7 sent, precision 0.70
+    - "buying this"   # 7 sent, precision 0.88
+    - "cheap"   # 7 sent, precision 0.50
+    - "hate"   # 7 sent, precision 0.50
+    - "honestly"   # 7 sent, precision 0.54
+    - "it really"   # 7 sent, precision 0.58
+    - "love it"   # 7 sent, precision 0.70
+    - "love the"   # 7 sent, precision 0.64
+    - "negative"   # 7 sent, precision 0.50
+    - "not recommend"   # 7 sent, precision 1.00
+    - "piece"   # 7 sent, precision 0.64
+    - "polished"   # 7 sent, precision 0.58
+    - "recomend"   # 7 sent, precision 1.00
+    - "regret"   # 7 sent, precision 1.00
+    - "unless"   # 7 sent, precision 0.58
+    - "you enjoyed"   # 7 sent, precision 1.00
+    - "a pretty"   # 6 sent, precision 0.50
+    - "a solid"   # 6 sent, precision 0.75
+    - "a transformers"   # 6 sent, precision 0.86
+    - "amazing game"   # 6 sent, precision 0.86
+    - "bad game"   # 6 sent, precision 1.00
+    - "brings"   # 6 sent, precision 0.67
+    - "disappointment"   # 6 sent, precision 0.86
+    - "dollars"   # 6 sent, precision 0.60
+    - "don't buy"   # 6 sent, precision 0.86
+    - "don't recommend"   # 6 sent, precision 1.00
+    - "enjoy this"   # 6 sent, precision 0.67
+    - "flaws"   # 6 sent, precision 0.55
+    - "good but"   # 6 sent, precision 0.60
+    - "including"   # 6 sent, precision 0.50
+    - "must buy"   # 6 sent, precision 1.00
+    - "old school"   # 6 sent, precision 0.55
+    - "older"   # 6 sent, precision 0.75
+    - "piece of"   # 6 sent, precision 0.75
+    - "really good"   # 6 sent, precision 0.50
+    - "rts games"   # 6 sent, precision 0.67
+    - "school"   # 6 sent, precision 0.50
+    - "thumbs"   # 6 sent, precision 0.60
+    - "transformers fan"   # 6 sent, precision 0.86
+    - "waiting"   # 6 sent, precision 0.60
+    - "waiting for"   # 6 sent, precision 0.75
+    - "want a"   # 6 sent, precision 0.55
+    - "waste your"   # 6 sent, precision 0.75
+    - "you buy"   # 6 sent, precision 0.67
+    - "you're looking"   # 6 sent, precision 1.00
+    - "5/10"   # 5 sent, precision 0.71
+    - "a sale"   # 5 sent, precision 0.62
+    - "ahead"   # 5 sent, precision 0.56
+    - "and buy"   # 5 sent, precision 0.83
+    - "avoid"   # 5 sent, precision 0.62
+    - "away from"   # 5 sent, precision 0.62
+    - "beautiful game"   # 5 sent, precision 1.00
+    - "excellent"   # 5 sent, precision 0.62
+    - "game at"   # 5 sent, precision 0.50
+    - "game its"   # 5 sent, precision 1.00
+    - "go buy"   # 5 sent, precision 1.00
+    - "gol"   # 5 sent, precision 0.62
+    - "hard reset"   # 5 sent, precision 1.00
+    - "hardcore"   # 5 sent, precision 0.62
+    - "hitman game"   # 5 sent, precision 0.50
+    - "i enjoyed"   # 5 sent, precision 0.71
+    - "i expected"   # 5 sent, precision 0.56
+    - "i wouldn't"   # 5 sent, precision 0.62
+    - "if u"   # 5 sent, precision 0.62
+    - "is awesome"   # 5 sent, precision 0.50
+    - "is worth"   # 5 sent, precision 0.50
+    - "memories"   # 5 sent, precision 0.56
+    - "more fun"   # 5 sent, precision 0.56
+    - "nice game"   # 5 sent, precision 0.83
+    - "polish"   # 5 sent, precision 0.56
+    - "positive"   # 5 sent, precision 1.00
+    - "promise"   # 5 sent, precision 0.83
+    - "racing game"   # 5 sent, precision 0.83
+    - "rating"   # 5 sent, precision 0.71
+    - "really like"   # 5 sent, precision 0.71
+    - "reset"   # 5 sent, precision 0.62
+    - "shooters"   # 5 sent, precision 0.83
+    - "stay away"   # 5 sent, precision 0.83
+    - "think the"   # 5 sent, precision 0.50
+    - "thumbs down"   # 5 sent, precision 1.00
+    - "to recommend"   # 5 sent, precision 1.00
+    - "won't be"   # 5 sent, precision 0.50
+    - "you really"   # 5 sent, precision 0.56
+  other: []
+ambiguous:
+  - "beautiful"
+  - "easy"
+  - "free"
+  - "hard"
+  - "smooth"

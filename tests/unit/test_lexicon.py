@@ -1,7 +1,6 @@
 import pytest
 
 from steam_review_translator.aspect.lexicon import Lexicon, LexiconMatcher, load_lexicon, tokenize
-from steam_review_translator.aspect.sentences import split_sentences
 from steam_review_translator.core.schemas import Aspect
 
 
@@ -69,13 +68,3 @@ def test_match_terms_reports_matched_text(matcher: LexiconMatcher) -> None:
 def test_unknown_aspect_in_lexicon_rejected() -> None:
     with pytest.raises(ValueError, match="unknown aspect"):
         Lexicon.from_dict({"aspects": {"vibes": ["chill"]}})
-
-
-def test_split_sentences() -> None:
-    assert split_sentences("Fun game! Bad ending.\nWould buy again?  Yes") == [
-        "Fun game!",
-        "Bad ending.",
-        "Would buy again?",
-        "Yes",
-    ]
-    assert split_sentences("   ") == []

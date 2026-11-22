@@ -1,0 +1,13 @@
+metric,value
+rows,6417106.0000
+columns,4.0000
+games (distinct app_id),9972.0000
+empty review_text,7491.0000
+rows whose exact text appears more than once,2589512.0000
+distinct texts that are duplicated,637110.0000
+"english rows (fastText lid.176, p>=0.50)",6123774.0000
+english share,0.9543
+english share among non-short reviews,0.9766
+"clean english rows (english, not short, not spam)",4817044.0000
+clean share of all rows,0.7507
+timestamp column available,0.0000

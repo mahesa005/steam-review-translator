@@ -1,0 +1,13 @@
+population,metric,value
+all_sentences,sentences,2685750.0000
+all_sentences,share with >=1 label (9 aspects + overall),0.3298
+all_sentences,share with >=1 of the 9 aspects,0.3064
+all_sentences,share with NO hit (implicit/other risk),0.6702
+all_sentences,share with >=2 aspects,0.0532
+all_sentences,review-level share with >=1 aspect hit,0.6288
+sentences_ge_4_tokens,sentences,2440093.0000
+sentences_ge_4_tokens,share with >=1 label (9 aspects + overall),0.3497
+sentences_ge_4_tokens,share with >=1 of the 9 aspects,0.3291
+sentences_ge_4_tokens,share with NO hit (implicit/other risk),0.6503
+sentences_ge_4_tokens,share with >=2 aspects,0.0585
+sentences_ge_4_tokens,review-level share with >=1 aspect hit,0.6239

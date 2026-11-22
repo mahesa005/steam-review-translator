@@ -33,7 +33,15 @@ data/processed/*
 !data/interim/.gitkeep
 !data/processed/.gitkeep
 
-# --- Artifacts: models, embeddings, logs, run outputs ---
+# --- Dataset GameWikiSum (lisensi riset akademik) + hasil konversinya ---
+# Jangan pernah di-commit: unduh sendiri ke data/raw/Full_GameWiki/.
+Full_GameWiki/
+data/**/Full_GameWiki/
+*.jsonl
+data/**/*.jsonl
+data/**/*.jsonl.gz
+
+# --- Artefak: models, embeddings, logs, run outputs ---
 artifacts/*
 !artifacts/.gitkeep
 

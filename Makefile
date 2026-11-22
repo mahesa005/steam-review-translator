@@ -11,7 +11,10 @@ PYTHON  := $(VENV_BIN)/python
 REVIEWS ?= tests/fixtures/sample_reviews.json
 GAME    ?= Fake Game
 
-.PHONY: setup lint format test test-cov demo clean task1-download task1-data task1-baselines task1-train-tfidf
+EDA       := experiments/task2_aspect/eda
+EDA_STEPS := 00_ingest 01_overview 02_sentences 03_lexicon 04_topics 05_select_games              06_candidate_sample 07_report
+
+.PHONY: setup lint format test test-cov demo clean eda-setup eda eda-smoke task1-download task1-data task1-baselines task1-train-tfidf
 
 setup:
 	$(BOOTSTRAP_PYTHON) -m venv .venv
@@ -36,6 +39,17 @@ test-cov:
 
 demo:
 	$(PYTHON) -m steam_review_translator demo --reviews $(REVIEWS) --game "$(GAME)"
+
+# Task 2 EDA (needs the task2 extra + spaCy model; see experiments/task2_aspect/eda/README.md)
+eda-setup:
+	$(PYTHON) -m pip install -e ".[dev,task2]"
+	$(PYTHON) -m spacy download en_core_web_sm
+
+eda:
+	@for s in $(EDA_STEPS); do echo "== $$s"; $(PYTHON) $(EDA)/$$s.py $(EDA_ARGS) || exit 1; done
+
+eda-smoke:
+	@$(MAKE) --no-print-directory eda EDA_ARGS=--smoke
 
 clean:
 	$(BOOTSTRAP_PYTHON) -c "import pathlib, shutil; \
