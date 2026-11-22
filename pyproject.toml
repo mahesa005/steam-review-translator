@@ -93,6 +93,12 @@ module = ["edalib", "labelkit", "labelkit.*"]
 follow_imports = "skip"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+# Task 2 system deps are optional extras: CI installs only [dev], so treat them as untyped.
+module = ["torch", "torch.*", "transformers", "transformers.*", "peft", "peft.*",
+          "vaderSentiment", "vaderSentiment.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
