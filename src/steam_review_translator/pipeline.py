@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from typing import Any
 
 from steam_review_translator.aspect.aggregate import aggregate
-from steam_review_translator.aspect.sentences import split_sentences
+from steam_review_translator.aspect.sentences import split_reviews
 from steam_review_translator.core.config import ComponentConfig, PipelineConfig
 from steam_review_translator.core.interfaces import (
     AspectTagger,
@@ -33,6 +33,8 @@ SENTIMENT_REGISTRY: dict[str, str] = {
 }
 ASPECT_REGISTRY: dict[str, str] = {
     "mock": "steam_review_translator.aspect.mock:MockAspectTagger",
+    "lexicon": "steam_review_translator.aspect.lexicon_tagger:LexiconAspectTagger",
+    "peft": "steam_review_translator.aspect.peft_tagger:PeftAspectTagger",
     # "bertopic": "steam_review_translator.aspect.bertopic_tagger:BertopicTagger",  # Mahesa
 }
 SUMMARIZATION_REGISTRY: dict[str, str] = {
@@ -73,7 +75,8 @@ class Pipeline:
             sentiment = self.sentiment.analyze(inp.reviews)
 
         with _stage("task2.aspect"):
-            sentences = [s for review in inp.reviews for s in split_sentences(review.text)]
+            per_review = split_reviews([review.text for review in inp.reviews])
+            sentences = [s for sents in per_review for s in sents]
             labels = self.tagger.tag(sentences)
             if len(labels) != len(sentences):
                 raise ValueError(

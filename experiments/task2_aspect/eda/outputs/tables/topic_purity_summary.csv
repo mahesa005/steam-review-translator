@@ -1,0 +1,4 @@
+config,topics,mixed_share,low_coverage_share,sentences_in_low_coverage_topics,size_weighted_purity
+mcs100_reduce-none,65,0.5538,0.4000,8971,0.5602
+mcs10_reduce-none,543,0.3223,0.5672,11726,0.5447
+mcs30_reduce-none,210,0.5238,0.4571,9972,0.5621

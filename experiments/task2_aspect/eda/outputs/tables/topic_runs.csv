@@ -1,0 +1,7 @@
+config,min_cluster_size,reduce_outliers,n_topics,outlier_share,cv_mean,cv_median,largest_topic_share
+mcs10_reduce-none,10,none,543,0.4450,0.3509,0.3487,0.0205
+mcs10_reduce-c-tf-idf,10,c-tf-idf,543,0.0061,0.3450,0.3381,0.0209
+mcs30_reduce-none,30,none,210,0.4511,0.3586,0.3457,0.0283
+mcs30_reduce-c-tf-idf,30,c-tf-idf,210,0.0062,0.3616,0.3493,0.0349
+mcs100_reduce-none,100,none,65,0.5094,0.4057,0.3870,0.0381
+mcs100_reduce-c-tf-idf,100,c-tf-idf,65,0.0063,0.4163,0.3861,0.0682

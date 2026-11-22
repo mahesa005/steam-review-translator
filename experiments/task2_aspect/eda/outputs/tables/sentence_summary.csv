@@ -1,0 +1,11 @@
+metric,value
+sampled reviews,469200.0000
+sampled games,2346.0000
+sentences,2685750.0000
+sentences per review (mean),5.7241
+sentences per review (median),3.0000
+reviews with a single sentence (share),0.2212
+reviews without any . ! ? (share),0.1104
+sentences produced by run-on chunking (share),0.1052
+sentences with < 4 word tokens (share),0.0915
+words per sentence (mean),14.3957

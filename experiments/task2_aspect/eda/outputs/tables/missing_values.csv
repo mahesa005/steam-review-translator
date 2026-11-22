@@ -1,0 +1,5 @@
+column,dtype,n_missing_or_empty
+app_id,int32,0
+review_text,string,7491
+review_score,int8,0
+review_votes,int8,0

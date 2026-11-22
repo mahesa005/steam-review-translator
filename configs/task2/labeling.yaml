@@ -1,0 +1,64 @@
+# Task 2 labeling pipeline (experiments/task2_aspect/labeling, see DESIGN.md).
+seed: 42
+
+input:
+  sample: data/processed/candidate_sample.jsonl
+  reviews_parquet: data/interim/task2_eda/reviews.parquet   # full review text for context
+
+batching:
+  max_sentences: 50        # whole reviews per batch, never split
+
+prompts_dir: experiments/task2_aspect/labeling/prompts
+
+stages:
+  label:                   # stage 1
+    model: claude-opus-5-5
+    effort: medium
+    max_tokens: 32000
+  review:                  # stage 2, run once per reviewer (API path)
+    model: claude-sonnet-5-5
+    effort: low
+    max_tokens: 16000
+    n_reviewers: 3
+  finalize:                # stage 3, only sentences flagged by >= min_flags reviewers
+    model: claude-opus-5-5
+    effort: medium
+    max_tokens: 32000
+    min_flags: 1
+
+# Claude Code agent path (run_agents.py), chosen after the reviewer pilot (2026-11-18):
+# Sonnet caught Opus's clear errors, a second Opus caught a subtle one; Haiku caught neither.
+agents:
+  max_sentences: 130       # per batch; the 129-sentence pilot batch worked cleanly
+  label: opus
+  # 2026-11-18, after 14 batches (1,494 sentences): reviews changed 0.4% of labels and the Opus
+  # reviewer added 2 unique flags, at ~2/3 of the tokens. Batches done before keep their Opus
+  # review; later batches use Sonnet only, and stage 3 runs grouped over many batches.
+  # 2026-11-21, deadline next day: review dropped for the rest (it changed 10 of 2,422 labels).
+  # Existing review files are still used; labeled batches without one go straight to final.
+  reviewers: []
+  label_group: 3           # batches per label agent (pays the ~45k agent overhead once)
+  finalize: opus
+  run_dir: data/interim/task2_labeling/agents
+
+# Local model path (local_label.py), 2026-11-21: label with Ollama on the laptop GPU instead of
+# Claude agents, after calibrating against the sentences Opus already labeled.
+local:
+  model: qwen2.5:7b
+  host: http://localhost:11434
+  num_ctx: 8192            # guideline (~2k tokens) + one review + output
+  samples: 4               # answers per review, combined by vote (1 = one greedy answer)
+  temperature: 0.7         # used when samples > 1
+  out_dir: data/interim/task2_labeling/local
+
+pilot:
+  n_batches: 2             # first run: this many batches, train games only
+  split: train
+
+verification:
+  random_unflagged_share: 0.10   # owner also checks this share of unflagged sentences, per split
+
+output:
+  runs_dir: data/interim/task2_labeling      # requests, raw results, parsed outputs per run
+  final_labels: data/processed/task2_labels.jsonl
+  verify_queue: data/processed/task2_verify_queue.csv
