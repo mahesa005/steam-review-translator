@@ -1,0 +1,32 @@
+# Task 1 data preparation (experiments/task1_sentiment/prepare_*.py).
+# Changing anything here changes the splits: re-run `make task1-data` and say so in the report.
+
+seed: 17
+output_subdir: task1   # -> data/processed/task1/
+
+metacritic:
+  raw_dir: metacritic    # relative to data/raw/: games_reviews.csv or metacritic-games.zip
+  review_type: user                              # user reviews only (critic quotes are short blurbs)
+  # Label from the user score (0-10). Metacritic's own colour bands.
+  negative_max: 4      # 0-4  -> negative
+  positive_min: 8      # 8-10 -> positive (5-7 -> neutral)
+  language: en
+  min_words: 3
+  # Game selection: games need at least `min_reviews` usable reviews; `n_games` are drawn
+  # stratified by the game's positive share (so mixed / negative games are represented).
+  n_games: 200
+  min_reviews: 300
+  max_reviews_per_game: 2000   # cap so a few huge games don't dominate training
+  strata: 5
+  split: {train: 0.70, val: 0.15, test: 0.15}   # by game, stratified the same way
+
+steam:
+  raw_file: steam/steam.csv.bz2                  # Zenodo 1000885 (same dump as Task 2)
+  language: en
+  min_words: 3
+  n_games: 50
+  reviews_per_game: 200
+  min_reviews: 1000     # only sample from apps with enough reviews to draw from
+  strata: 5             # stratify apps by positive (recommended) share
+  include_app_ids: []   # TODO: the 10 Task 2 games (Steam app ids) -- ask Mahesa
+  manual_check_size: 100   # reviews exported for the label-noise check

@@ -29,7 +29,9 @@ log = get_logger(__name__)
 # ---------------------------------------------------------------------------------------
 SENTIMENT_REGISTRY: dict[str, str] = {
     "mock": "steam_review_translator.sentiment.mock:MockSentimentAnalyzer",
-    # "vader": "steam_review_translator.sentiment.vader:VaderSentimentAnalyzer",  # Farrel
+    "vader": "steam_review_translator.sentiment.vader:VaderSentimentAnalyzer",
+    "tfidf": "steam_review_translator.sentiment.tfidf:TfidfSentimentAnalyzer",
+    "transformer": "steam_review_translator.sentiment.transformer:TransformerSentimentAnalyzer",
 }
 ASPECT_REGISTRY: dict[str, str] = {
     "mock": "steam_review_translator.aspect.mock:MockAspectTagger",

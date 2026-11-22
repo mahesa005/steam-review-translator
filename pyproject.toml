@@ -70,6 +70,7 @@ where = ["src"]
 line-length = 100
 target-version = "py311"
 src = ["src", "tests"]
+extend-exclude = ["*.ipynb"]  # Colab notebooks: shell magics, not package code
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
@@ -105,6 +106,7 @@ module = [
     "rouge_score", "rouge_score.*",
     "bertopic", "bertopic.*",
     "sentence_transformers", "sentence_transformers.*",
+    "sklearn", "sklearn.*",
 ]
 ignore_missing_imports = true
 
