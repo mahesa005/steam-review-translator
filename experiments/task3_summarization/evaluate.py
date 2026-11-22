@@ -64,6 +64,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--length-penalty", type=float, default=None)
     parser.add_argument("--bootstrap", type=int, default=None, help="jumlah resample bootstrap")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--extractive",
+        choices=["lead", "textrank"],
+        default=None,
+        help="B1: ringkasan ekstraktif (k=3) dari teks input; --model hanya untuk tokenizer",
+    )
+    parser.add_argument(
+        "--records", type=Path, default=None, help="JSON per sampel untuk error_analysis.py"
+    )
     return parser.parse_args()
 
 
@@ -106,15 +115,22 @@ def main() -> int:
     )
     log.info("sampel valid: %d dari %d", stats["valid"], stats["total"])
 
-    predictions = generate_outputs(
-        args.model,
-        examples,
-        tokenizer,
-        max_input,
-        max_target,
-        num_beams=num_beams,
-        length_penalty=length_penalty,
-    )
+    if args.extractive:
+        from steam_review_translator.summarization.extractive import lead_k, textrank
+
+        pick = lead_k if args.extractive == "lead" else textrank
+        k = cfg.get("extractive", {}).get("k", 3)
+        predictions = [pick(e.input_text.split("</s>")[-1].strip(), k=k) for e in examples]
+    else:
+        predictions = generate_outputs(
+            args.model,
+            examples,
+            tokenizer,
+            max_input,
+            max_target,
+            num_beams=num_beams,
+            length_penalty=length_penalty,
+        )
     references = [e.target for e in examples]
 
     rouge = average_rouge(predictions, references)
@@ -156,6 +172,25 @@ def main() -> int:
             )
 
     print(json.dumps(report, indent=2))
+    if args.records:
+        args.records.parent.mkdir(parents=True, exist_ok=True)
+        records = [
+            {
+                "game": e.game,
+                "input": e.input_text,
+                "reference": ref,
+                "prediction": pred,
+                "aspects": [a["aspect"] for a in e.aspects],
+                "rougeL": score,
+                "boilerplate_ratio": e.meta["dropped_boilerplate"]
+                / max(e.meta["paragraphs_total"], 1),
+            }
+            for e, pred, ref, score in zip(
+                examples, predictions, references, per_sample_rouge, strict=True
+            )
+        ]
+        args.records.write_text(json.dumps(records, indent=1), encoding="utf-8")
+        log.info("record per sampel ditulis ke %s", args.records)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(

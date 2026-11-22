@@ -24,7 +24,10 @@ import _bootstrap  # noqa: F401  # pastikan paket repo bisa diimpor tanpa pip in
 from steam_review_translator.aspect.lexicon import LexiconMatcher, load_lexicon
 from steam_review_translator.core.config import load_yaml
 from steam_review_translator.core.logging import get_logger
-from steam_review_translator.summarization.aspects import pseudo_aspect_table
+from steam_review_translator.summarization.aspects import (
+    lexicon_polarity_fn,
+    pseudo_aspect_table,
+)
 from steam_review_translator.summarization.preprocessing import preprocess_document
 from steam_review_translator.summarization.serialization import (
     format_aspect_prefix,
@@ -96,13 +99,54 @@ def load_split(
 ) -> list[dict[str, Any]]:
     """Muat satu split GameWikiSum sebagai list of dict.
 
-    Butuh extra ``.[task3]`` (package ``datasets``).
+    ``dataset_name`` boleh berupa folder lokal berisi ``train.json`` / ``val.json`` /
+    ``test.json`` (file asli GameWikiSum, lihat build_dataset.py); selain itu dimuat dari
+    Hugging Face Hub (butuh extra ``.[task3]``, package ``datasets``).
     """
+    if Path(dataset_name).is_dir():
+        return load_local_split(Path(dataset_name), split)
+
     from datasets import load_dataset  # import lokal: library berat
 
     ds = load_dataset(dataset_name, split=split, cache_dir=str(cache_dir) if cache_dir else None)
     log.info("loaded %s: %d rows", split, len(ds))
     return [dict(row) for row in ds]
+
+
+#: Nama split -> file pada folder GameWikiSum lokal.
+LOCAL_SPLIT_FILES = {"train": "train.json", "validation": "val.json", "val": "val.json",
+                     "test": "test.json"}  # fmt: skip
+#: Batas paragraf per dokumen saat memuat file lokal (beberapa dokumen punya ribuan).
+MAX_LOCAL_PARAGRAPHS = 400
+
+
+def load_local_split(data_dir: Path, split: str) -> list[dict[str, Any]]:
+    """Muat satu split dari file GameWikiSum asli (array kelompok -> array dokumen).
+
+    Hanya field yang dipakai yang disimpan (hemat memori): ``game_title``,
+    ``preprocessed_paragraphs_per_reviews`` (diratakan jadi list paragraf, maksimal
+    ``MAX_LOCAL_PARAGRAPHS``) dan ``preprocessed_summary``.
+    """
+    path = data_dir / LOCAL_SPLIT_FILES.get(split, f"{split}.json")
+    rows: list[dict[str, Any]] = []
+    for group in iter_json_array(path):
+        for doc in group if isinstance(group, list) else [group]:
+            paragraphs: list[str] = []
+            for review in doc.get("preprocessed_paragraphs_per_reviews") or []:
+                paragraphs.extend([review] if isinstance(review, str) else review)
+                if len(paragraphs) >= MAX_LOCAL_PARAGRAPHS:
+                    break
+            rows.append(
+                {
+                    "game_title": str(doc.get("game_title") or doc.get("wiki_title") or ""),
+                    "preprocessed_paragraphs_per_reviews": paragraphs[:MAX_LOCAL_PARAGRAPHS],
+                    "preprocessed_summary": doc.get("preprocessed_summary")
+                    or doc.get("summary")
+                    or "",
+                }
+            )
+    log.info("loaded %s from %s: %d documents", split, path, len(rows))
+    return rows
 
 
 def normalize_rows(
@@ -141,6 +185,7 @@ def build_examples(
     (>= 100 kata setelah pembersihan) sesuai spec [A] langkah 5.
     """
     matcher = matcher or LexiconMatcher(load_lexicon())
+    polarity_fn = polarity_fn or lexicon_polarity_fn
     examples: list[Example] = []
     kept = 0
     for i, row in enumerate(rows):
@@ -297,3 +342,26 @@ def load_jsonl(path: str | Path) -> list[dict[str, Any]]:
     """Baca JSONL menjadi list of dict."""
     with Path(path).open(encoding="utf-8") as fh:
         return [json.loads(line) for line in fh if line.strip()]
+
+
+def make_compute_metrics(tokenizer: Any) -> Any:
+    """``compute_metrics`` for ``Seq2SeqTrainer`` (``predict_with_generate=True``).
+
+    Returns ROUGE-1/2/L/Lsum on the validation set, so ``metric_for_best_model="rougeL"``
+    and early stopping work.
+    """
+    import numpy as np
+
+    from steam_review_translator.summarization.metrics import average_rouge
+
+    def compute(eval_pred: Any) -> dict[str, float]:
+        preds, labels = eval_pred
+        if isinstance(preds, tuple):
+            preds = preds[0]
+        preds = np.where(preds < 0, tokenizer.pad_token_id, preds)
+        labels = np.where(labels < 0, tokenizer.pad_token_id, labels)
+        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+        decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+        return average_rouge(decoded_preds, decoded_labels)
+
+    return compute
