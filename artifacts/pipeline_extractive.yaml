@@ -1,0 +1,12 @@
+﻿sentiment:
+  impl: mock
+  params: {}
+aspect:
+  impl: mock
+  params:
+    lexicon: configs/task2/lexicon.yaml
+summarization:
+  impl: extractive
+  params:
+    method: textrank
+    k: 3
