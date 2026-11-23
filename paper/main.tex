@@ -39,7 +39,9 @@ RoBERTa classifier reaches a macro-F1 of 0.801 on Metacritic user reviews of uns
 labeled by a large language model and train a LoRA-adapted RoBERTa tagger that reaches a
 pair F1 of 0.586 and an aspect-detection F1 of 0.732 on held-out games, against 0.315 for a
 lexicon baseline. For meta-reviews, we fine-tune BART on GameWikiSum with the aspect table as
-an input prefix; \todo{Task 3 result: ROUGE-L of E2 vs E1 and baselines}. The three components
+an input prefix; it reaches a ROUGE-L of 0.180 against 0.109--0.121 for extractive and zero-shot
+baselines, and the aspect prefix raises aspect coverage (0.340 to 0.379) without changing ROUGE.
+The three components
 share one typed interface and run end to end.
 \end{abstract}
 
@@ -68,7 +70,8 @@ so each component can be swapped independently; (ii) a sentiment study that eval
 review-level accuracy and the per-game distribution, which is the quantity users actually see;
 (iii) a 7,002-sentence aspect-sentiment dataset for Steam reviews, labeled with a large language
 model under a written guideline, and a parameter-efficient tagger trained on it; and (iv) an
-aspect-conditioned meta-review generator. \todo{one sentence on the main Task 3 finding}
+aspect-conditioned meta-review generator, together with the finding that the aspect prefix makes
+the output follow the table more closely while ROUGE stays the same.
 
 % =========================================================================================
 \section{Related Work}
@@ -394,11 +397,36 @@ predicted neutral, and \emph{other}, a heterogeneous class, is mostly missed (re
 \subsection{Data}
 
 GameWikiSum \citep{antognini2020gamewikisum} pairs the professional reviews of a game with a
-summary from its Wikipedia article. One sample is one game: the input is the paragraphs of all
-its reviews and the target is the summary. We use the official splits.
-\todo{Table: documents and games per split, mean input and summary length (from the notebook's
-dataset statistics cell); one training example. Check which Wikipedia section the summaries
-come from.}
+section of its Wikipedia article. One sample is one game: the input is the paragraphs of all
+its reviews and the target is the Wikipedia text, which in practice mostly describes the
+gameplay (e.g.\ ``cat quest is an action role-playing video game played from a top-down
+perspective \dots''). We use the official splits (Table~\ref{tab:t3data}). Inputs are very long
+(about 11,000--12,000 words per game over the first 400 paragraphs) compared with the
+1,024-token model input, which is why paragraph selection is needed.
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Split & Documents & Games & Paragraphs/doc & Input words/doc & Summary words (mean / median) \\
+    \midrule
+    Train & 11,744 & 7,006 & 162.8 & 10,800 & 459.4 / 318 \\
+    Val & 1,454 & 880 & 184.3 & 12,208 & 431.4 / 310 \\
+    Test & 1,454 & 862 & 183.6 & 12,289 & 464.8 / 314 \\
+    \bottomrule
+  \end{tabular}
+  \caption{GameWikiSum statistics. Paragraph and word counts use at most the first 400 review
+  paragraphs of a document.}
+  \label{tab:t3data}
+\end{table}
+
+\paragraph{Training example.} Game \emph{Hybrid}. Model input after preprocessing:
+\texttt{aspects: multiplayer (9, neutral) ; gameplay (6, neutral) ; price (3, neutral) ;
+content (2, neutral) ; performance (1, neutral) </s>} ``hybrid is a unique experiment in
+multiplayer cover-based shooting, and it succeeds gloriously. the action is frantic and
+non-stop \dots''. Target: ``players choose between the variant faction and the paladin faction
+when they begin playing \dots''.
 
 \subsection{Method}
 
@@ -417,18 +445,21 @@ followed by the text.
   \item \textbf{B2}: \texttt{bart-large-cnn} \citep{lewis2020bart} zero-shot.
   \item \textbf{E1}: \texttt{bart-base} fine-tuned on the text only.
   \item \textbf{E2}: \texttt{bart-base} fine-tuned with the aspect prefix (main system).
-  \item \textbf{E3}: \texttt{t5-base} \citep{raffel2020t5} fine-tuned with the aspect prefix.
 \end{itemize}
+A T5-base variant with the aspect prefix (E3, \citealp{raffel2020t5}) was implemented but not
+run within the time budget.
 
 \subsection{Experimental setting}
 
-Fine-tuning uses AdamW with learning rate $3\times10^{-5}$ for BART and $10^{-4}$ for T5,
-effective batch size 32 (4 $\times$ 8 gradient accumulation), mixed precision, at most 1,024
-input and 256 target tokens, and early stopping on validation ROUGE-L. Decoding uses beam
-search (4 beams, no repeated trigrams). \todo{number of training documents (pilot or full),
-epochs actually run, number of test documents, GPU}. We report ROUGE-1/2/L \citep{lin2004rouge},
-the share of the top aspects that the summary mentions (aspect coverage), polarity consistency
-with the table, and a paired bootstrap test (1,000 resamples) for E2 vs E1.
+E1 and E2 are fine-tuned on a pilot subset of 2,000 training documents for three epochs with
+AdamW (learning rate $3\times10^{-5}$), effective batch size 32 (4 $\times$ 8 gradient
+accumulation), mixed precision, at most 1,024 input and 256 target tokens, on one T4 GPU
+(Google Colab; about 45 minutes per model). After every epoch, ROUGE-L is computed on 200
+validation documents and the best epoch is kept. Decoding uses beam search (4 beams, no repeated
+trigrams). All systems are evaluated once on the first 500 test documents (499 remain after
+dropping documents with fewer than 100 words). We report ROUGE-1/2/L \citep{lin2004rouge}, the
+share of the table's top aspects that the output mentions (aspect coverage), polarity
+consistency with the table, and a paired bootstrap test (1,000 resamples) for E2 vs E1.
 
 \subsection{Results}
 
@@ -439,24 +470,60 @@ with the table, and a paired bootstrap test (1,000 resamples) for E2 vs E1.
     \toprule
     System & ROUGE-1 & ROUGE-2 & ROUGE-L & Aspect cov. & Pol.\ cons. \\
     \midrule
-    B1 TextRank & \todo{} & & & & \\
-    B2 BART-large-CNN zero-shot & \todo{} & & & & \\
-    E1 BART-base, text only & \todo{} & & & & \\
-    E2 BART-base + aspects & \todo{} & & & & \\
-    E3 T5-base + aspects & \todo{} & & & & \\
+    B1 TextRank & 0.177 & 0.028 & 0.109 & 0.291 & 0.596 \\
+    B2 BART-large-CNN zero-shot & 0.193 & 0.030 & 0.121 & \textbf{0.385} & 0.655 \\
+    E1 BART-base, text only & 0.311 & \textbf{0.077} & \textbf{0.180} & 0.340 & 0.954 \\
+    E2 BART-base + aspects & \textbf{0.320} & \textbf{0.077} & \textbf{0.180} & 0.379 &
+      \textbf{0.964} \\
     \bottomrule
   \end{tabular}
-  \caption{Task 3 test results on GameWikiSum. \todo{significance of E2 vs E1}}
+  \caption{Task 3 test results on GameWikiSum (499 documents). E2 vs E1 ROUGE-L: mean
+  difference $-0.0001$, 95\% CI $[-0.0024, 0.0020]$, $p=0.91$ (paired bootstrap).}
   \label{tab:t3results}
 \end{table}
 
-\todo{2--3 sentences interpreting Table~\ref{tab:t3results}: does the aspect prefix help?}
+Fine-tuning matters most: E1 and E2 reach a ROUGE-L of 0.180, against 0.109 for TextRank and
+0.121 for zero-shot BART-large-CNN, which was trained on news and copies review sentences rather
+than describing the game. The aspect prefix does not change ROUGE (E2 vs E1: ROUGE-L difference
+$-0.0001$, $p=0.91$), but it moves the output towards the aspects in the table: aspect coverage
+rises from 0.340 to 0.379 and polarity consistency from 0.954 to 0.964. On validation, ROUGE-L
+was flat across epochs (0.175--0.179 for E2), so more training data rather than more epochs is
+the likely way to improve.
 
 \subsection{Error analysis}
 
-Errors are classified on 50 test samples stratified by ROUGE-L into hallucination, repetition,
-missed aspect or wrong polarity, Wikipedia-style description instead of opinion, and input
-failure (mostly boilerplate). \todo{category counts per system and one example output}
+We classified 50 test outputs per system, stratified by ROUGE-L, into hallucination,
+repetition, missed aspect or wrong polarity, Wikipedia-style description instead of opinion,
+and input failure (Table~\ref{tab:t3errors}).
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lccccc}
+    \toprule
+    System & Hallucination & Missed aspect & Descriptive style & Other errors & No error \\
+    \midrule
+    B2 zero-shot & 40 & 0 & 8 & 0 & 2 \\
+    E1 & 0 & 2 & 45 & 0 & 3 \\
+    E2 & 1 & 0 & 48 & 0 & 1 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Error categories on 50 test outputs per system (automatic heuristics; other errors
+  are repetition and input failure, none observed).}
+  \label{tab:t3errors}
+\end{table}
+
+\paragraph{The target is description, not opinion.} Almost every fine-tuned output is a
+Wikipedia-style description of how the game is played, because that is what the references
+are. The fine-tuned models learned this style well (best E2 output, \emph{Cat Quest},
+ROUGE-L 0.311: ``cat quest is an action role-playing game played from a third-person
+perspective \dots'') but the result is a game description rather than a summary of what
+reviewers think. This is a mismatch between GameWikiSum and our meta-review goal.
+
+\paragraph{Generic and invented content.} Low-scoring outputs drift into generic genre text
+or wrong entities, e.g.\ for \emph{Anito: Defend a Land Enraged} (ROUGE-L 0.047) E2 starts with
+``super mario bros is an action role-playing game \dots''. B2 mostly copies or recombines review
+sentences, which the heuristic counts as hallucination (40 of 50).
 
 % =========================================================================================
 \section{End-to-End Example}
@@ -467,8 +534,13 @@ We ran the pipeline on 200 random reviews of \emph{Two Worlds II HD}, a Task~2 t
 sentences, positive) and overall (287, positive) first, followed by performance (92,
 negative), graphics (86, positive), story (77, positive), content (74, positive) and price (71,
 negative), which matches the common complaints about this game's technical state and price.
-\todo{rerun with S4 + System C + E2 and insert the full output (sentiment shares and
-meta-review)}
+This run used the models available on one machine: for Task~1 the zero-shot S2 model (which
+predicts 45\% positive, 47\% negative and 8\% neutral, and so gets the dominant label wrong)
+and for Task~3 the zero-shot B2 generator, which returned a copy of one positive review
+(``Two Worlds II has a classless, fluid gameplay that allows you to be what you want to
+be \dots''). The fine-tuned S4 and E2 weights are stored outside the repository; by the
+results in Sections~\ref{sec:task1} and~\ref{sec:task3}, S4 would correct the sentiment shares
+and E2 would produce a game description conditioned on the aspect table.
 
 % =========================================================================================
 \section{Limitations}
@@ -485,6 +557,8 @@ meta-review)}
     aspect tables from a lexicon but receives the Task~2 model's tables in the pipeline; and
     GameWikiSum differs from our target setting (its inputs are not Steam user reviews and its
     references are Wikipedia text, not opinion summaries).
+  \item \textbf{Small Task~3 budget.} E1 and E2 were trained on 2,000 of 11,744 training
+    documents and evaluated on 500 of 1,454 test documents; T5 (E3) was not run.
   \item \textbf{Limited search.} One seed per model and little hyperparameter search.
 \end{itemize}
 
@@ -494,13 +568,18 @@ meta-review)}
 We built a pipeline that turns a batch of Steam reviews into a sentiment distribution, an
 aspect table and a meta-review. Fine-tuned encoders give accurate per-game sentiment shares,
 and a LoRA-tuned RoBERTa trained on LLM-labeled sentences clearly outperforms lexicon methods
-for aspect tagging. \todo{Task 3 conclusion}. Future work: give the aspect tagger review
-context, verify a subset of the aspect labels by hand, and train the meta-review generator on
-real aspect tables.
+for aspect tagging. For meta-reviews, fine-tuning BART on GameWikiSum clearly beats extractive
+and zero-shot baselines, and the aspect prefix steers the output towards the table, but the
+references teach a descriptive style rather than an opinion summary. Future work: give the
+aspect tagger review context, verify a subset of the aspect labels by hand, and train the
+meta-review generator on opinion-style references and real aspect tables.
 
 \paragraph{Code and data.} Code: \url{https://github.com/mahesa005/steam-review-translator}.
-\todo{how the datasets are shared: Task 2 labels in the repository; Task 1 and 3 data through
-their original sources and our preparation scripts}
+The Task~2 aspect dataset (7,002 labeled sentences) is in the repository
+(\texttt{data/processed/task2\_labels.jsonl.gz}), together with the trained System~C adapter.
+Task~1 data are rebuilt from the original Metacritic (Kaggle) and Steam (Zenodo) sources with
+our preparation scripts, and Task~3 uses GameWikiSum from its authors (academic use only, not
+redistributed) through our loading and preprocessing code.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
