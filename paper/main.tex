@@ -162,7 +162,14 @@ neutral or mixed, and that the flag agrees with the text on 97.7\% of polar revi
   \label{tab:t1data}
 \end{table}
 
-\todo{one training example (review text, score, label) from the Metacritic train split}
+\paragraph{Training examples} (Metacritic train split, text as written by users).
+\emph{Resident Evil 5}, score 10 $\rightarrow$ positive: ``My cousin and I had a lot of fun
+playing this game back in the day \dots\ Lots of replay value and quite the adventure.''
+\emph{FIFA 21}, score 0 $\rightarrow$ negative: ``Unrealistic, extremely borring and broken. Its
+not about winning or losing, I dont enjoy this game even when I win.''
+\emph{Watch Dogs: Legion}, score 6 $\rightarrow$ neutral: ``Meh. Its mediocre at best, I loved
+the past 2 games and this just felt really bland. Like, it isn't bad, but its just so
+middling.''
 
 \subsection{Models}
 
@@ -231,7 +238,9 @@ points.
 but 0.604 for neutral. Accuracy falls at the label boundaries of the user score: 0.917 at
 score~0 and 0.974 at score~10, but 0.653 at~4, 0.555 at~5, 0.674 at~7 and 0.741 at~8. These
 reviews are genuinely ambiguous, because the label comes from a number the text does not
-always reflect.
+always reflect: a training review of \emph{S.T.A.L.K.E.R.~2} scored 6 (neutral) reads ``the
+game is raw, lots of bugs, bad shooting \dots\ so many years of development to get this
+crap.''
 
 \paragraph{Long reviews.} The model sees at most 256 tokens; accuracy drops from 0.896 for
 reviews under 25 words to 0.784 for reviews over 400 words on Metacritic.
