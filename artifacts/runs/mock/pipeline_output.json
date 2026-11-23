@@ -1,0 +1,62 @@
+{
+  "game": "Fake Game",
+  "sentiment": {
+    "positive": 0.5,
+    "negative": 0.3333333333333333,
+    "neutral": 0.16666666666666666,
+    "dominant": "positive"
+  },
+  "aspects": [
+    {
+      "aspect": "gameplay",
+      "freq": 4,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "performance",
+      "freq": 4,
+      "polarity": "negative"
+    },
+    {
+      "aspect": "price",
+      "freq": 4,
+      "polarity": "negative"
+    },
+    {
+      "aspect": "content",
+      "freq": 3,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "audio",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "difficulty",
+      "freq": 2,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "multiplayer",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "overall",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "story",
+      "freq": 2,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "graphics",
+      "freq": 1,
+      "polarity": "positive"
+    }
+  ],
+  "meta_review": "Across 12 reviews, players' reception of Fake Game is mostly positive (50% positive, 33% negative, 17% neutral). The most discussed aspects are gameplay (4 mentions), performance (4 mentions) and price (4 mentions). Reviewers mostly praise the audio, multiplayer, overall and graphics. Common complaints concern the performance and price."
+}

@@ -1,0 +1,123 @@
+{
+  "game": "Fake Game",
+  "reviews": [
+    {
+      "review_id": "r001",
+      "text": "The combat is fantastic and the boss fights are great. The soundtrack is amazing!",
+      "recommended": true
+    },
+    {
+      "review_id": "r002",
+      "text": "Constant crashes and terrible lag. The optimization is awful, I want a refund.",
+      "recommended": false
+    },
+    {
+      "review_id": "r003",
+      "text": "Gorgeous art style and great lighting. The story kept me hooked until the ending.",
+      "recommended": true
+    },
+    {
+      "review_id": "r004",
+      "text": "Great co-op with friends. Matchmaking is fast and the servers are solid.",
+      "recommended": true
+    },
+    {
+      "review_id": "r005",
+      "text": "Way too expensive for the amount of content. The DLC feels like a cash grab.",
+      "recommended": false
+    },
+    {
+      "review_id": "r006",
+      "text": "It is a game. I played it for a few hours.",
+      "recommended": null
+    },
+    {
+      "review_id": "r007",
+      "text": "The puzzle mechanics are clever and fun. Ten hours of solid content.",
+      "recommended": true
+    },
+    {
+      "review_id": "r008",
+      "text": "The plot is boring and the dialogue is poor. Gameplay gets repetitive fast.",
+      "recommended": false
+    },
+    {
+      "review_id": "r009",
+      "text": "Masterpiece. 10/10, would recommend to anyone who loves a challenge.",
+      "recommended": true
+    },
+    {
+      "review_id": "r010",
+      "text": "The difficulty is punishing but fair. The learning curve is steep and it is hard.",
+      "recommended": null
+    },
+    {
+      "review_id": "r011",
+      "text": "Stutter everywhere and the fps is unplayable. Bugs in every quest.",
+      "recommended": false
+    },
+    {
+      "review_id": "r012",
+      "text": "Lovely music and voice acting, though the price is a bit high.",
+      "recommended": null
+    }
+  ],
+  "sentiment": {
+    "positive": 0.5,
+    "negative": 0.3333333333333333,
+    "neutral": 0.16666666666666666,
+    "dominant": "positive"
+  },
+  "aspects": [
+    {
+      "aspect": "gameplay",
+      "freq": 4,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "performance",
+      "freq": 4,
+      "polarity": "negative"
+    },
+    {
+      "aspect": "price",
+      "freq": 4,
+      "polarity": "negative"
+    },
+    {
+      "aspect": "content",
+      "freq": 3,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "audio",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "difficulty",
+      "freq": 2,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "multiplayer",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "overall",
+      "freq": 2,
+      "polarity": "positive"
+    },
+    {
+      "aspect": "story",
+      "freq": 2,
+      "polarity": "neutral"
+    },
+    {
+      "aspect": "graphics",
+      "freq": 1,
+      "polarity": "positive"
+    }
+  ]
+}
