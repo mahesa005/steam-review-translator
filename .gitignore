@@ -61,3 +61,8 @@ Thumbs.db
 
 # --- Local tool state ---
 .remember/
+
+# Local notes (never commit)
+CLAUDE.md
+context.md
+.claude/
