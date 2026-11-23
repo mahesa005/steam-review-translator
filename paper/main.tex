@@ -36,7 +36,8 @@ polarity expressed towards each, and (3) a short meta-review. For sentiment, a f
 RoBERTa classifier reaches a macro-F1 of 0.801 on Metacritic user reviews of unseen games and
 0.846 on Steam reviews, and estimates per-game sentiment shares within 2.9 percentage points
 (total variation distance). For aspects, we build a 7,002-sentence aspect-sentiment dataset
-labeled by a large language model and train a LoRA-adapted RoBERTa tagger that reaches a
+labeled by a large language model and checked manually, and train a LoRA-adapted RoBERTa tagger
+that reaches a
 pair F1 of 0.586 and an aspect-detection F1 of 0.732 on held-out games, against 0.315 for a
 lexicon baseline. For meta-reviews, we fine-tune BART on GameWikiSum with the aspect table as
 an input prefix; it reaches a ROUGE-L of 0.180 against 0.109--0.121 for extractive and zero-shot
@@ -279,7 +280,7 @@ split), a second model (Claude Sonnet, and Opus for the first 14 batches) review
 and a third pass decided the flagged sentences. Review changed only 10 of 2,422 labels (0.4\%),
 so the remaining batches were labeled by Opus alone. A local 7B open model (Qwen2.5) was also
 tried as a cheaper labeler but agreed poorly with Opus (pair F1 0.55--0.62), so it was not
-used. The labels are silver labels: they measure agreement with the LLM, not with people.
+used. Finally, the Task~2 author checked all 7,002 LLM labels manually against the guideline.
 
 \begin{table}[t]
   \centering
@@ -555,9 +556,9 @@ and E2 would produce a game description conditioned on the aspect table.
 \section{Limitations}
 
 \begin{itemize}
-  \item \textbf{Silver labels.} Task~2 gold labels come from an LLM and were not verified by
-    people before evaluation; Task~1 labels come from user scores or the recommend flag, which
-    do not always match the text.
+  \item \textbf{Label quality.} Task~2 labels were produced by an LLM and checked by a single
+    person, so no inter-annotator agreement is reported; Task~1 labels come from user scores or
+    the recommend flag, which do not always match the text.
   \item \textbf{Sentence-only aspect tagging.} The Task~2 tagger sees one sentence without the
     rest of the review, which causes many of its errors.
   \item \textbf{Small aspect test set.} Task~2 is tested on two games (851 sentences); rare
@@ -580,7 +581,7 @@ and a LoRA-tuned RoBERTa trained on LLM-labeled sentences clearly outperforms le
 for aspect tagging. For meta-reviews, fine-tuning BART on GameWikiSum clearly beats extractive
 and zero-shot baselines, and the aspect prefix steers the output towards the table, but the
 references teach a descriptive style rather than an opinion summary. Future work: give the
-aspect tagger review context, verify a subset of the aspect labels by hand, and train the
+aspect tagger review context, measure agreement between several human annotators, and train the
 meta-review generator on opinion-style references and real aspect tables.
 
 \paragraph{Code and data.} Code: \url{https://github.com/mahesa005/steam-review-translator}.
