@@ -57,6 +57,12 @@ srt demo --reviews tests/fixtures/sample_reviews.json --game "Fake Game"
 python demo.py --reviews tests/fixtures/sample_reviews.json --game "Fake Game"   # same thing
 srt demo --reviews tests/fixtures/sample_reviews.json --game "Fake Game" --out artifacts/runs/result.json
 
+# run the demo with the real models in the repository (TF-IDF sentiment, LoRA aspect tagger,
+# TextRank meta-review); no downloads besides the LFS weights
+git lfs pull
+pip install -e ".[task1,task2]"
+srt demo --reviews tests/fixtures/sample_reviews.json --game "Fake Game" --config configs/pipeline_demo.yaml
+
 # checks
 make lint                # ruff check + ruff format --check + mypy
 make test                # pytest

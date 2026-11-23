@@ -1,0 +1,22 @@
+# Demo with the real models that ship with the repository (no downloads, runs on CPU):
+#   Task 1: S1 TF-IDF + logistic regression (artifacts/models/task1/s1_tfidf.pkl)
+#   Task 2: system C, roberta-base + LoRA (artifacts/task2/peft, weights via `git lfs pull`)
+#   Task 3: B1 extractive TextRank (the fine-tuned BART weights are stored outside the repo)
+# Needs the extras: pip install -e ".[task1,task2]"
+#   srt demo --reviews tests/fixtures/sample_reviews.json --game "Fake Game" \
+#            --config configs/pipeline_demo.yaml
+sentiment:          # Task 1 (Farrel)
+  impl: tfidf
+  params:
+    model_path: artifacts/models/task1/s1_tfidf.pkl
+
+aspect:             # Task 2 (Mahesa)
+  impl: peft
+  params:
+    model_dir: artifacts/task2/peft
+
+summarization:      # Task 3 (Lukas)
+  impl: extractive
+  params:
+    method: textrank
+    k: 3
