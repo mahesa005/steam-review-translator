@@ -118,11 +118,13 @@ into the same pipeline.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{beam/beam_pipeline.pdf}
-  \caption{The Steam Review Translator in BEAM notation. Blue boxes are data, green boxes symbols,
-  purple hexagons statistical models, rounded boxes processes (orange: training, yellow: inference
-  and transformation, red: engineering) and the triangle an actor. The batch of reviews is shared by
-  the three tasks, and the aspect table produced by Task~2 is an input of Task~3. The
-  machine-readable description is in \texttt{paper/beam/beam.ttl}.}
+  \caption{The Steam Review Translator in BEAM notation (system perspective). Blue boxes are
+  data, green boxes symbols, purple hexagons statistical models, rounded boxes processes (orange:
+  training, yellow: inference and transformation, red: engineering) and the triangle an actor.
+  The batch of reviews is shared by the three tasks, and the aspect table produced by Task~2 is
+  an input of Task~3. The Task~2 labels are engineered by the Task~2 author with an LLM
+  annotator. The machine-readable description, using the BEAM core ontology, is in
+  \texttt{paper/beam/beam.ttl}.}
   \label{fig:pipeline}
 \end{figure}
 
